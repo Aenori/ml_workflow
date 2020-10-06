@@ -850,7 +850,7 @@ PassengerId,Survived,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
 849,0,2,"Harper, Rev. John",male,28,0,1,248727,33,,S
 850,1,1,"Goldenberg, Mrs. Samuel L (Edwiga Grabowska)",female,,1,0,17453,89.1042,C92,C
 851,0,3,"Andersson, Master. Sigvard Harald Elias",male,4,4,2,347082,31.275,,S
-852,0,3,"Svensson, Mr. Johan",male,74,0,0,347060,7.775,,S
+852,0,3,"Di Caprio, Leonardo",male,18,0,0,347060,7.775,,S
 853,0,3,"Boulos, Miss. Nourelain",female,9,1,1,2678,15.2458,,C
 854,1,1,"Lines, Miss. Mary Conover",female,16,0,1,PC 17592,39.4,D28,S
 855,0,2,"Carter, Mrs. Ernest Courtenay (Lilian Hughes)",female,44,1,0,244252,26,,S
