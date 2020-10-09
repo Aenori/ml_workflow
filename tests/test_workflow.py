@@ -1,13 +1,20 @@
 
 from ml_workflow.workflow import WorkflowNode
 
-def test_graph_size():
-    root1 = WorkflowNode()
-    root2 = WorkflowNode()
+def test_constructor_polymorphism():
+    root = WorkflowNode(None)
+    child = WorkflowNode(None, parents = root)
+    assert(child.parents == [root])
+    child = WorkflowNode(None, parents = [root])
+    assert(child.parents == [root])
 
-    child1 = WorkflowNode(parents = [root2])
-    merge_child2 = WorkflowNode(parents = [root1, child1])
-    child3 = WorkflowNode(parents = [merge_child2])
+def test_graph_size():
+    root1 = WorkflowNode(None)
+    root2 = WorkflowNode(None)
+
+    child1 = WorkflowNode(None, parents = root2)
+    merge_child2 = WorkflowNode(None, parents = [root1, child1])
+    child3 = WorkflowNode(None, parents = merge_child2)
 
     assert(root1.get_graph_size() == 1)
     assert(root2.get_graph_size() == 1)
