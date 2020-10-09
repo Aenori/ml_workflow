@@ -1,5 +1,5 @@
 
-from ml_workflow.workflow import WorkflowNode
+from ml_workflow.workflow_node import WorkflowNode
 
 def test_constructor_polymorphism():
     root = WorkflowNode(None)

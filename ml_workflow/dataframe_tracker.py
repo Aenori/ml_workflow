@@ -1,5 +1,5 @@
-from .workflow import get_user_code_origine_workflow
-from .workflow import WorkflowNodeRule
+from .workflow_node import get_user_code_origine_workflow
+from .workflow_node import WorkflowNodeRule
 
 from .context_utils import get_current_rule
 
