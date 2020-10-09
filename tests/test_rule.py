@@ -1,9 +1,4 @@
-import os, sys
-# NRO : Should not stay ...
-sys.path.append(os.getcwd())
-
-from ml_workflow import mlwf_rule
-from ml_workflow.rule import Rule
+from common_import import *
 
 def test_mlwf_rule_with_args():
     @mlwf_rule(name = 'incrementation')

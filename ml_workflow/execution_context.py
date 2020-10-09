@@ -1,5 +1,8 @@
 import collections
 import threading
+import logging
+
+logger = logging.getLogger(__name__)
 
 context_by_thread = collections.defaultdict(list)
 
@@ -15,3 +18,6 @@ def get_current_context():
     if len(context):
         return context[-1]
     return None
+
+def get_current_rule():
+    current = get_current_context()
