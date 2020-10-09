@@ -32,7 +32,7 @@ class WorkflowNodeRule(WorkflowNode):
     def __init__(self, rule, parents = [], modified_column = None):
         super().__init__(rule, parents)
         self.modified_columns = set()
-        if modified_column:
+        if modified_column is not None:
             self.add_modified_column(modified_column)
 
     def add_modified_column(self, column):

@@ -31,3 +31,10 @@ def test_tracable_data_set():
     node = node.get_previous_node()
     assert(node.get_previous_node() is None)
 
+def test_tracable_data_set_extract():
+    df = TracableDataFrame({'Age' : [1, 67, 89, 10, 20]})
+    df_extract = df[df['Age'] > 30]
+    assert(len(df_extract) == 2)
+    assert(isinstance(df_extract, TracableDataFrame))
+
+    assert(df_extract.ml_workflow_current_node.get_graph_size() == 2)
