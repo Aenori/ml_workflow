@@ -1,10 +1,9 @@
 from common_import import *
 
-from ml_workflow import mlwf_rule
 from ml_workflow.rule import Rule
 
-def test_mlwf_rule_with_args():
-    @mlwf_rule(name = 'incrementation')
+def test_rule_with_args():
+    @ml_workflow.rule(name = 'incrementation')
     def f(x):
         return x + 1
 
@@ -13,8 +12,8 @@ def test_mlwf_rule_with_args():
     assert('def f(x):' in f.get_source())
     assert(isinstance(f, Rule))
 
-def test_mlwf_rule_without_args():
-    @mlwf_rule
+def test_rule_without_args():
+    @ml_workflow.rule
     def g(x):
         return x + 2
 
