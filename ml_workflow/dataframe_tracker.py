@@ -3,6 +3,9 @@ from .workflow_node import WorkflowNodeRule
 
 from .context_utils import get_current_rule
 
+from .function_utils import prevent_exception
+
+@prevent_exception
 def handle_change(df, key):
     if df.ml_workflow_current_node is None:
         df.ml_workflow_current_node = get_user_code_origine_workflow()
