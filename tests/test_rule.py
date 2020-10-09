@@ -1,5 +1,8 @@
 from common_import import *
 
+from ml_workflow import mlwf_rule
+from ml_workflow.rule import Rule
+
 def test_mlwf_rule_with_args():
     @mlwf_rule(name = 'incrementation')
     def f(x):

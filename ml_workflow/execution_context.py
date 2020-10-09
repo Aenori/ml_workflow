@@ -18,6 +18,3 @@ def get_current_context():
     if len(context):
         return context[-1]
     return None
-
-def get_current_rule():
-    current = get_current_context()
