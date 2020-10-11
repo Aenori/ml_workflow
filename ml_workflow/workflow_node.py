@@ -3,14 +3,27 @@
 # At the moment i am not using networkx because it is mainly working
 # with graph, whereas i want to work mainly with node.
 from enum import Enum
+import itertools
 
 class WorkflowNode:
+    next_id = 1
+
     def __init__(self, origin, parents = []):
         self.origin = origin
+
+        self.id = WorkflowNode.next_id
+        WorkflowNode.next_id += 1
+
         if isinstance(parents, list):
             self.parents = parents
         elif isinstance(parents, WorkflowNode):
             self.parents = [parents]
+
+    def __str__(self):
+        return str(self.origin)
+
+    def get_str_id(self):
+        return f'Workflow_node_{self.id}'
 
     # Return the size of the graph where it is the last node
     def get_graph_size(self):
@@ -27,6 +40,12 @@ class WorkflowNode:
             return self.parents[0]
 
         return None
+
+    def get_all_nodes(self):
+        res = [self]
+        for parent in self.parents:
+            res.extend(parent.get_all_nodes())
+        return res
 
 class WorkflowNodeRule(WorkflowNode):
     def __init__(self, rule, parents = [], modified_column = None):

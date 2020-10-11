@@ -21,10 +21,9 @@ from __future__ import print_function
 
 import os
 import sys
-from tensorflow.python.keras.utils.io_utils import path_to_string
-from tensorflow.python.util import nest
-from tensorflow.python.util.tf_export import keras_export
-
+# from tensorflow.python.keras.utils.io_utils import path_to_string
+# from tensorflow.python.util import nest
+# from tensorflow.python.util.tf_export import keras_export
 
 try:
   # pydot-ng is a fork of pydot that is better maintained.
@@ -66,7 +65,7 @@ def add_edge(dot, src, dst):
     dot.add_edge(pydot.Edge(src, dst))
 
 
-@keras_export('keras.utils.model_to_dot')
+# @keras_export('keras.utils.model_to_dot')
 def model_to_dot(model,
                  show_shapes=False,
                  show_layer_names=True,
@@ -93,10 +92,6 @@ def model_to_dot(model,
   Raises:
     ImportError: if graphviz or pydot are not available.
   """
-  from tensorflow.python.keras.layers import wrappers
-  from tensorflow.python.keras.engine import sequential
-  from tensorflow.python.keras.engine import functional
-
   if not check_pydot():
     message = (
         'Failed to import pydot. You must `pip install pydot` '
@@ -126,136 +121,35 @@ def model_to_dot(model,
   sub_w_first_node = {}
   sub_w_last_node = {}
 
-  layers = model.layers
-  if not model._is_graph_network:
-    node = pydot.Node(str(id(model)), label=model.name)
-    dot.add_node(node)
-    return dot
-  elif isinstance(model, sequential.Sequential):
-    if not model.built:
-      model.build()
-    layers = super(sequential.Sequential, model).layers
+  layers = model.get_all_nodes()
 
-  # Create graph nodes.
-  for i, layer in enumerate(layers):
-    layer_id = str(id(layer))
-
-    # Append a wrapped layer's label to node's label, if it exists.
-    layer_name = layer.name
-    class_name = layer.__class__.__name__
-
-    if isinstance(layer, wrappers.Wrapper):
-      if expand_nested and isinstance(layer.layer,
-                                      functional.Functional):
-        submodel_wrapper = model_to_dot(layer.layer, show_shapes,
-                                        show_layer_names, rankdir,
-                                        expand_nested,
-                                        subgraph=True)
-        # sub_w : submodel_wrapper
-        sub_w_nodes = submodel_wrapper.get_nodes()
-        sub_w_first_node[layer.layer.name] = sub_w_nodes[0]
-        sub_w_last_node[layer.layer.name] = sub_w_nodes[-1]
-        dot.add_subgraph(submodel_wrapper)
-      else:
-        layer_name = '{}({})'.format(layer_name, layer.layer.name)
-        child_class_name = layer.layer.__class__.__name__
-        class_name = '{}({})'.format(class_name, child_class_name)
-
-    if expand_nested and isinstance(layer, functional.Functional):
-      submodel_not_wrapper = model_to_dot(layer, show_shapes,
-                                          show_layer_names, rankdir,
-                                          expand_nested,
-                                          subgraph=True)
-      # sub_n : submodel_not_wrapper
-      sub_n_nodes = submodel_not_wrapper.get_nodes()
-      sub_n_first_node[layer.name] = sub_n_nodes[0]
-      sub_n_last_node[layer.name] = sub_n_nodes[-1]
-      dot.add_subgraph(submodel_not_wrapper)
-
-    # Create node's label.
-    if show_layer_names:
-      label = '{}: {}'.format(layer_name, class_name)
-    else:
-      label = class_name
-
-    # Rebuild the label as a table including input/output shapes.
-    if show_shapes:
-
-      def format_shape(shape):
-        return str(shape).replace(str(None), '?')
-
-      try:
-        outputlabels = format_shape(layer.output_shape)
-      except AttributeError:
-        outputlabels = '?'
-      if hasattr(layer, 'input_shape'):
-        inputlabels = format_shape(layer.input_shape)
-      elif hasattr(layer, 'input_shapes'):
-        inputlabels = ', '.join(
-            [format_shape(ishape) for ishape in layer.input_shapes])
-      else:
-        inputlabels = '?'
-      label = '%s\n|{input:|output:}|{{%s}|{%s}}' % (label,
-                                                     inputlabels,
-                                                     outputlabels)
-
-    if not expand_nested or not isinstance(
-        layer, functional.Functional):
-      node = pydot.Node(layer_id, label=label)
+  for layer in layers:
+      node = pydot.Node(layer.get_str_id(), label=str(layer))
       dot.add_node(node)
 
   # Connect nodes with edges.
   for layer in layers:
-    layer_id = str(id(layer))
-    for i, node in enumerate(layer._inbound_nodes):
-      node_key = layer.name + '_ib-' + str(i)
-      if node_key in model._network_nodes:
-        for inbound_layer in nest.flatten(node.inbound_layers):
-          inbound_layer_id = str(id(inbound_layer))
-          if not expand_nested:
-            assert dot.get_node(inbound_layer_id)
-            assert dot.get_node(layer_id)
-            add_edge(dot, inbound_layer_id, layer_id)
-          else:
-            # if inbound_layer is not Model or wrapped Model
-            if (not isinstance(inbound_layer,
-                               functional.Functional) and
-                not is_wrapped_model(inbound_layer)):
-              # if current layer is not Model or wrapped Model
-              if (not isinstance(layer, functional.Functional) and
-                  not is_wrapped_model(layer)):
-                assert dot.get_node(inbound_layer_id)
-                assert dot.get_node(layer_id)
-                add_edge(dot, inbound_layer_id, layer_id)
-              # if current layer is Model
-              elif isinstance(layer, functional.Functional):
-                add_edge(dot, inbound_layer_id,
-                         sub_n_first_node[layer.name].get_name())
-              # if current layer is wrapped Model
-              elif is_wrapped_model(layer):
-                add_edge(dot, inbound_layer_id, layer_id)
-                name = sub_w_first_node[layer.layer.name].get_name()
-                add_edge(dot, layer_id, name)
-            # if inbound_layer is Model
-            elif isinstance(inbound_layer, functional.Functional):
-              name = sub_n_last_node[inbound_layer.name].get_name()
-              if isinstance(layer, functional.Functional):
-                output_name = sub_n_first_node[layer.name].get_name()
-                add_edge(dot, name, output_name)
-              else:
-                add_edge(dot, name, layer_id)
-            # if inbound_layer is wrapped Model
-            elif is_wrapped_model(inbound_layer):
-              inbound_layer_name = inbound_layer.layer.name
-              add_edge(dot,
-                       sub_w_last_node[inbound_layer_name].get_name(),
-                       layer_id)
+    layer_id = layer.get_str_id()
+    for inbound_node in layer.parents:
+          inbound_layer_id = inbound_node.get_str_id()
+
+          assert dot.get_node(inbound_layer_id)
+          assert dot.get_node(layer_id)
+          add_edge(dot, inbound_layer_id, layer_id)
+
   return dot
 
+def correct_weird_pydot_bug(filename):
+    with open(filename, 'r') as f:
+        content = f.read().replace('scale(1.3333 1.3333) ', '')
 
-@keras_export('keras.utils.plot_model')
+    with open(filename, 'w') as f:
+        f.write(content)
+
+
+# @keras_export('keras.utils.plot_model')
 def plot_model(model,
-               to_file='model.png',
+               to_file='model.svg',
                show_shapes=False,
                show_layer_names=True,
                rankdir='TB',
@@ -297,23 +191,26 @@ def plot_model(model,
                      rankdir=rankdir,
                      expand_nested=expand_nested,
                      dpi=dpi)
-  to_file = path_to_string(to_file)
+  
+  #to_file = path_to_string(to_file)
   if dot is None:
-    return
+      return
+
   _, extension = os.path.splitext(to_file)
   if not extension:
-    extension = 'png'
+      extension = 'png'
   else:
-    extension = extension[1:]
+      extension = extension[1:]
+
   # Save image to disk.
   dot.write(to_file, format=extension)
-  # Return the image as a Jupyter Image object, to be displayed in-line.
-  # Note that we cannot easily detect whether the code is running in a
-  # notebook, and thus we always return the Image if Jupyter is available.
-  if extension != 'pdf':
-    try:
-      from IPython import display
-      return display.Image(filename=to_file)
-    except ImportError:
-      pass
+
+  if extension == 'svg':
+      correct_weird_pydot_bug(to_file)
+  elif extension not in ('pdf', 'svg'): ## svg is useless here, but keptfor clarity
+      try:
+          from IPython import display
+          return display.Image(filename=to_file)
+      except ImportError:
+          pass
       
