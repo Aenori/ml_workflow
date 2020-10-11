@@ -3,6 +3,8 @@ from common_import import *
 from ml_workflow.viz_utils import check_pydot, model_to_dot, plot_model
 from tests.utils.compare_or_generate_ref import compare_or_generate_ref
 
+from utils.decorator import ReferenceUsingTest
+
 def get_simple_graph_with_fork():
     root1 = WorkflowNode('DataSource1')
     root2 = WorkflowNode('DataSource2')
@@ -22,10 +24,12 @@ def test_model_to_dot():
 
     model_as_dot.write('test_regression.dot', format='dot')
 
+@ReferenceUsingTest('test_regression.svg')
 def test_plot_model_as_svg():
     WorkflowNode.next_id = 1
     _test_plot_model('test_regression.svg')
 
+@ReferenceUsingTest('test_regression.png')
 def test_plot_model_as_png():
     _test_plot_model('test_regression.png')
 
