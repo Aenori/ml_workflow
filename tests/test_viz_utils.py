@@ -23,6 +23,7 @@ def test_model_to_dot():
     model_as_dot.write('test_regression.dot', format='dot')
 
 def test_plot_model_as_svg():
+    WorkflowNode.next_id = 1
     _test_plot_model('test_regression.svg')
 
 def test_plot_model_as_png():
