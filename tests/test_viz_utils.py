@@ -1,7 +1,7 @@
 from common_import import *
 
 from ml_workflow.viz_utils import check_pydot, model_to_dot, plot_model
-from tests.utils.compare_or_generate_ref import compare_or_generate_ref
+from tests.utils import compare_or_generate_ref
 
 from utils.decorator import ReferenceUsingTest
 
