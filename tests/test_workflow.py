@@ -33,7 +33,6 @@ def test_get_all_node():
 
     assert(set([root1]) == set(root1.get_all_nodes()))
     assert(set([root2]) == set(root2.get_all_nodes()))
-    print(child1.get_all_nodes())
     assert(set([root2, child1]) == set(child1.get_all_nodes()))
     assert(set([root1, root2, child1, merge_child2]) == set(merge_child2.get_all_nodes()))
     assert(set([root1, root2, child1, merge_child2, child3]) == set(child3.get_all_nodes()))
