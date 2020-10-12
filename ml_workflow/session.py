@@ -1,18 +1,21 @@
 import random
 import datetime as dt
+import pathlib
 
 from .session_recorder_player.session_recorder import SessionRecorder
 from .session_recorder_player.session_record_player import SessionRecordPlayer
 
 class SessionRecordPlayerContext:
     def __init__(self, recorder_player):
-        pass
+        self.recorder_player = recorder_player
 
     def __enter__(self):
-        pass
+        Session.active_recorder_player = self.recorder_player
+        self.recorder_player.hook()
 
     def __exit__(self, type, value, traceback):
-        pass
+        Session.active_recorder_player = None
+        self.recorder_player.unhook()
 
 class Session:
     active_recorder_player = None
@@ -26,15 +29,15 @@ class Session:
         return Session.active_recorder_player.handle_data_source(source_function, args, kwargs)
 
     @staticmethod
-    def record_data_source(path = None):
+    def record_data_source(path = None, use_json = False, try_json = True):
         if path is None:
             now_as_file_compatible = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d_%H%M%S')
             path = 'ml_workflow_frozen_session_{now_as_file_compatible}_{random.random.int(0,10000)}'
         
-        os.mkdir(path)
+        pathlib.Path(path).mkdir(parents=True, exist_ok=True)
         Session.last_record = path
 
-        return SessionRecordContext(self, SessionRecorder(path))
+        return SessionRecordContext(SessionRecorder(path, use_json, try_json))
 
     @staticmethod
     def play_data_source_record(path = None):
@@ -43,6 +46,6 @@ class Session:
         assert(path)
         assert(os.path.isdir(path))
 
-        return SessionRecordContext(self, SessionRecordPlayer(path))
+        return SessionRecordContext(SessionRecordPlayer(path))
         
 
