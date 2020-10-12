@@ -18,5 +18,7 @@ class CheckRaisedError:
         pass
 
     def __exit__(self, type, value, traceback):
-        # __exit__ returning exception is catched
+        # To cause failure on uncatched exception
+        assert(type is not None)
+        # To prevent failure on catched exception
         return type is not None
