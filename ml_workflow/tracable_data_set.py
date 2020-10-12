@@ -34,8 +34,10 @@ def get_tracable_structure(klass):
 
 TracableDataFrame = get_tracable_structure(pd.DataFrame)
 
-def get_tracable_data_set(data_source):
-    if isinstance(data_source, pd.DataFrame):
-        return TracableDataFrame(data_source)
-
+def get_tracable_data_set(data_set):
+    if isinstance(data_set, pd.DataFrame):
+        return TracableDataFrame(data_set)
+    if isinstance(data_set, (list, dict)):
+        # TODO
+        return data_set
     raise Exception('Unknown source type')

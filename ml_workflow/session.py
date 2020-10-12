@@ -1,11 +1,11 @@
 import random
 import datetime as dt
-import pathlib
+import os, pathlib
 
 from .session_recorder_player.session_recorder import SessionRecorder
 from .session_recorder_player.session_record_player import SessionRecordPlayer
 
-class SessionRecordPlayerContext:
+class SessionRecordContext:
     def __init__(self, recorder_player):
         self.recorder_player = recorder_player
 
@@ -19,14 +19,6 @@ class SessionRecordPlayerContext:
 
 class Session:
     active_recorder_player = None
-
-    @staticmethod
-    def has_active_recorder_player():
-        return Session.active_recorder_player is not None
-
-    @staticmethod
-    def handle_data_source(source_function, args, kwargs):
-        return Session.active_recorder_player.handle_data_source(source_function, args, kwargs)
 
     @staticmethod
     def record_data_source(path = None, use_json = False, try_json = True):
