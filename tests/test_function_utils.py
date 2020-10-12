@@ -1,7 +1,7 @@
-import logging
+from common_import import *
+
 from testfixtures import LogCapture
 
-from common_import import *
 from ml_workflow.function_utils import prevent_exception
 
 @prevent_exception

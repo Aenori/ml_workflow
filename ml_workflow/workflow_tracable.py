@@ -7,9 +7,9 @@ class WorkflowTracable:
     def __init__(self, source_function = None, **kwargs):
         self.source_function = source_function
         
-        if not (set(kwargs.keys()) <= WorkflowTracable.AUTHORISED_ATTR):
-            unauthorised_keys = set(kwargs.keys()) - WorkflowTracable.AUTHORISED_ATTR
-            raise Exception(f"Unauthorized keys for WorkflowTracable : {unauthorised_keys}")
+        if not (set(kwargs.keys()) <= self.get_authorized_attr()):
+            unauthorised_keys = set(kwargs.keys()) - self.get_authorized_attr()
+            raise Exception(f"Unauthorized keys for {self.__class__} : {unauthorised_keys}")
 
         self.__dict__.update(kwargs)
         
@@ -31,6 +31,9 @@ class WorkflowTracable:
     def get_source(self):
         return inspect.getsource(self.source_function)
         
+    def get_authorized_attr(self):
+        return self.__class__.AUTHORISED_ATTR
+
 class WorkflowTracableDecorator:
     def __init__(self, klass):
         self.klass = klass
