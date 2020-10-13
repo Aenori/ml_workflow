@@ -2,6 +2,8 @@ import os
 import sys
 import pydot
 
+from .rule import Rule
+from .data_source import DataSource
 
 def check_pydot():
     """Returns True if PyDot and Graphviz are available."""
@@ -29,22 +31,28 @@ def model_to_dot(model,
                  expand_nested=False,
                  dpi=96,
                  subgraph=False):
-    if not check_pydot():
-        message = (
-            'Failed to import pydot. You must `pip install pydot` '
-            'and install graphviz (https://graphviz.gitlab.io/download/), ',
-            'for `pydotprint` to work.'
-        )
+    raise_error_if_no_pydot()
 
-        if 'IPython.core.magics.namespace' in sys.modules:
-            # We don't raise an exception here in order to avoid crashing
-            # notebook
-            # tests where graphviz is not available.
-            print(message)
-            return
-        else:
-            raise ImportError(message)
+    dot = get_dot_graph(subgraph, model, rankdir, dpi)
+    layers = model.get_all_nodes()
+    create_nodes(layers, dot)
+    add_edges_in_dot(layers, dot)
 
+    return dot
+
+
+def add_edges_in_dot(layers, dot):
+    for layer in layers:
+        layer_id = layer.get_str_id()
+
+        for inbound_node in layer.parents:
+            inbound_layer_id = inbound_node.get_str_id()
+            assert dot.get_node(inbound_layer_id)
+            assert dot.get_node(layer_id)
+            add_edge(dot, inbound_layer_id, layer_id)
+
+
+def get_dot_graph(subgraph, model, rankdir, dpi):
     if subgraph:
         dot = pydot.Cluster(style='dashed', graph_name=model.name)
         dot.set('label', model.name)
@@ -56,33 +64,58 @@ def model_to_dot(model,
         dot.set('dpi', dpi)
         dot.set_node_defaults(shape='record')
 
-    sub_n_first_node = {}
-    sub_n_last_node = {}
-    sub_w_first_node = {}
-    sub_w_last_node = {}
+    return dot
 
-    layers = model.get_all_nodes()
 
+def raise_error_if_no_pydot():
+    if not check_pydot():
+        message = (
+            'Failed to import pydot. You must `pip install pydot` '
+            'and install graphviz (https://graphviz.gitlab.io/download/), ',
+            'for `pydotprint` to work.'
+        )
+
+        if 'IPython.core.magics.namespace' in sys.modules:
+            # We don't raise an exception here in order to avoid crashing
+            # notebook tests where graphviz is not available.
+            print(message)
+            return
+        else:
+            raise ImportError(message)
+
+
+def create_nodes(layers, dot):
     for layer in layers:
+        origin = layer.origin 
         node = pydot.Node(
             layer.get_str_id(), 
             label=str(layer), 
             # Temporary for demo
-            URL=f"http://www.google.fr/?q={layer}"
+            URL=f"http://www.google.fr/?q={layer}",
+            shape=get_shape(origin),
+            color=get_color(origin)
         )
         dot.add_node(node)
 
-    # Connect nodes with edges.
-    for layer in layers:
-        layer_id = layer.get_str_id()
+SHAPE_BY_CLASS = {
+    Rule : 'diamond',
+    DataSource : 'oval',
+    str: 'rectangle'
+}
 
-        for inbound_node in layer.parents:
-            inbound_layer_id = inbound_node.get_str_id()
-            assert dot.get_node(inbound_layer_id)
-            assert dot.get_node(layer_id)
-            add_edge(dot, inbound_layer_id, layer_id)
-    return dot
+def get_shape(origin):
+    return SHAPE_BY_CLASS[origin.__class__]
 
+def get_color(origin):
+    try:
+        if origin.highlight == 2:
+            return 'red'
+        elif origin.highlight == 1:
+            return 'green'
+        else:
+            return 'grey'
+    except AttributeError:
+        return 'grey'
 
 def correct_weird_pydot_bug(filename):
     with open(filename, 'r') as f:

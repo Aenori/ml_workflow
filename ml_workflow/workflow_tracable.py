@@ -37,7 +37,6 @@ class WorkflowTracable:
     def get_authorized_attr(self):
         return self.__class__.AUTHORISED_ATTR
 
-
 class WorkflowTracableDecorator:
     def __init__(self, klass):
         self.klass = klass
