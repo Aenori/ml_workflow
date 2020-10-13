@@ -17,10 +17,10 @@ def failure():
 
 
 def test_prevent_exception():
-    with LogCapture() as l:
+    with LogCapture() as log_capture:
         failure()
 
-    l.check(
+    log_capture.check(
         ('ml_workflow.function_utils',
          'WARNING',
          'Encoutered error while processing failure, assert False'

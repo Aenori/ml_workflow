@@ -20,6 +20,7 @@ class SessionRecordPlayer(AbstractSessionRecorderPlayer):
 
         if result_recorded is None:
             raise Exception(
-                f"For data source {data_source.name}, could not find args {args_recorded}")
+                f"For data source {data_source.name},"
+                " could not find args {args_recorded}")
 
         return result_recorded

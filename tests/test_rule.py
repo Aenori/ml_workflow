@@ -10,7 +10,6 @@ import os
 import sys
 
 
-
 def test_rule_with_args():
     @ml_workflow.rule(name='incrementation')
     def f(x):

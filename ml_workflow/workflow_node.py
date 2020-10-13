@@ -36,7 +36,9 @@ class WorkflowNode:
     def get_previous_node(self):
         if self.has_multiple_parents():
             raise Exception(
-                "Attempt to call get_previous_node on node with several parents")
+                "Attempt to call get_previous_node on"
+                " node with several parents"
+            )
 
         if self.parents:
             return self.parents[0]

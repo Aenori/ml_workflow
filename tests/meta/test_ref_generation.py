@@ -2,8 +2,7 @@
 import os
 import sys
 sys.path.append(os.getcwd())
-
-import tests.test_viz_utils as test_viz_utils
+import tests.test_viz_utils as test_viz_utils  # noqa
 
 NB_FILE_TO_DELETE = 2
 
