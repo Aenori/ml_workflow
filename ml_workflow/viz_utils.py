@@ -1,20 +1,6 @@
 import os
 import sys
-
-
-try:
-    # pydot-ng is a fork of pydot that is better maintained.
-    import pydot_ng as pydot
-except ImportError:
-    # pydotplus is an improved version of pydot
-    try:
-        import pydotplus as pydot
-    except ImportError:
-        # Fall back on pydot if necessary.
-        try:
-            import pydot
-        except ImportError:
-            pydot = None
+import pydot
 
 
 def check_pydot():
@@ -78,7 +64,12 @@ def model_to_dot(model,
     layers = model.get_all_nodes()
 
     for layer in layers:
-        node = pydot.Node(layer.get_str_id(), label=str(layer))
+        node = pydot.Node(
+            layer.get_str_id(), 
+            label=str(layer), 
+            # Temporary for demo
+            URL=f"http://www.google.fr/?q={layer}"
+        )
         dot.add_node(node)
 
     # Connect nodes with edges.

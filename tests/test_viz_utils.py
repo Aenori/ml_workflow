@@ -27,13 +27,6 @@ def test_check_pydot():
     assert(check_pydot())
 
 
-def test_model_to_dot():
-    leaf_node = get_simple_graph_with_fork()
-    model_as_dot = model_to_dot(leaf_node)
-
-    model_as_dot.write('test_regression.dot', format='dot')
-
-
 @ReferenceUsingTest('test_regression.svg')
 def test_plot_model_as_svg():
     WorkflowNode.next_id = 1
@@ -50,3 +43,9 @@ def _test_plot_model(filename):
     plot_model(leaf_node, filename)
 
     compare_or_generate_ref(filename)
+
+def test_model_to_dot():
+    leaf_node = get_simple_graph_with_fork()
+    model_as_dot = model_to_dot(leaf_node)
+
+    model_as_dot.write('test_regression.dot', format='dot')

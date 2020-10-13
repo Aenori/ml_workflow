@@ -12,14 +12,20 @@
 <!-- Workflow_node_5 -->
 <g id="node1" class="node">
 <title>Workflow_node_5</title>
+<g id="a_node1"><a xlink:href="http://www.google.fr/?q=LeafNode" xlink:title="LeafNode">
 <polygon fill="none" stroke="#000000" points="69.5,-.5 69.5,-36.5 140.5,-36.5 140.5,-.5 69.5,-.5"/>
 <text text-anchor="middle" x="105" y="-14.8" font-family="Times,serif" font-size="14.00" fill="#000000">LeafNode</text>
+</a>
+</g>
 </g>
 <!-- Workflow_node_4 -->
 <g id="node2" class="node">
 <title>Workflow_node_4</title>
+<g id="a_node2"><a xlink:href="http://www.google.fr/?q=Merge_sources" xlink:title="Merge_sources">
 <polygon fill="none" stroke="#000000" points="55,-73.5 55,-109.5 155,-109.5 155,-73.5 55,-73.5"/>
 <text text-anchor="middle" x="105" y="-87.8" font-family="Times,serif" font-size="14.00" fill="#000000">Merge_sources</text>
+</a>
+</g>
 </g>
 <!-- Workflow_node_4&#45;&gt;Workflow_node_5 -->
 <g id="edge1" class="edge">
@@ -30,8 +36,11 @@
 <!-- Workflow_node_1 -->
 <g id="node3" class="node">
 <title>Workflow_node_1</title>
+<g id="a_node3"><a xlink:href="http://www.google.fr/?q=DataSource1" xlink:title="DataSource1">
 <polygon fill="none" stroke="#000000" points="0,-146.5 0,-182.5 86,-182.5 86,-146.5 0,-146.5"/>
 <text text-anchor="middle" x="43" y="-160.8" font-family="Times,serif" font-size="14.00" fill="#000000">DataSource1</text>
+</a>
+</g>
 </g>
 <!-- Workflow_node_1&#45;&gt;Workflow_node_4 -->
 <g id="edge2" class="edge">
@@ -42,8 +51,11 @@
 <!-- Workflow_node_3 -->
 <g id="node4" class="node">
 <title>Workflow_node_3</title>
+<g id="a_node4"><a xlink:href="http://www.google.fr/?q=Processing_on_DS2" xlink:title="Processing_on_DS2">
 <polygon fill="none" stroke="#000000" points="104,-146.5 104,-182.5 230,-182.5 230,-146.5 104,-146.5"/>
 <text text-anchor="middle" x="167" y="-160.8" font-family="Times,serif" font-size="14.00" fill="#000000">Processing_on_DS2</text>
+</a>
+</g>
 </g>
 <!-- Workflow_node_3&#45;&gt;Workflow_node_4 -->
 <g id="edge3" class="edge">
@@ -54,8 +66,11 @@
 <!-- Workflow_node_2 -->
 <g id="node5" class="node">
 <title>Workflow_node_2</title>
+<g id="a_node5"><a xlink:href="http://www.google.fr/?q=DataSource2" xlink:title="DataSource2">
 <polygon fill="none" stroke="#000000" points="124,-219.5 124,-255.5 210,-255.5 210,-219.5 124,-219.5"/>
 <text text-anchor="middle" x="167" y="-233.8" font-family="Times,serif" font-size="14.00" fill="#000000">DataSource2</text>
+</a>
+</g>
 </g>
 <!-- Workflow_node_2&#45;&gt;Workflow_node_3 -->
 <g id="edge4" class="edge">
