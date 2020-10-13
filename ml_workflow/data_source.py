@@ -5,13 +5,13 @@ class DataSource(WorkflowTracable):
     AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(
         set(['frozen_ignore_args', 'source_type', 'source'])
     )
-       
+
     def __init__(self, source_function, **kwargs):
         super().__init__(source_function, **kwargs)
 
         if 'frozen_ignore_args' in kwargs:
             self.frozen_ignore_args_positions = [
-                source_function.__code__.co_varnames.index(arg) 
+                source_function.__code__.co_varnames.index(arg)
                 for arg in kwargs['frozen_ignore_args']
             ]
             # This is important, we will be removing these arguments

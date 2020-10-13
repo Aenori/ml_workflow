@@ -17,7 +17,7 @@ def test_tracable_data_set():
 
     assert(set(df.columns) == set(['Age', 'IsYoung', 'IsOld', 'DansLaQuarantaine']))
     assert(df.ml_workflow_current_node.get_graph_size() == 4)
-    
+
     assert(df.ml_workflow_current_node.origin is no_context_rule)
     assert(df.ml_workflow_current_node.modified_columns == set(['IsYoung', 'DansLaQuarantaine']))
 

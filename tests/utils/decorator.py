@@ -10,7 +10,6 @@ class ReferenceUsingTest:
             ReferenceUsingTest.all_ref_files.extend(file_list)
         else:
             raise Exception(f"TestWithRef need filename or filelist as ref, received {type(f)} {f}")
-            
+
     def __call__(self, f):
         return f
-        

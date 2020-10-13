@@ -13,7 +13,7 @@ def test_prevent_exception():
         failure()
 
     l.check(
-        ('ml_workflow.function_utils', 
-         'WARNING', 
+        ('ml_workflow.function_utils',
+         'WARNING',
          'Encoutered error while processing failure, assert False'
     ))

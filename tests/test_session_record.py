@@ -45,7 +45,7 @@ def test_frozen_session():
 
     with Session.play_data_source_record('temp/test_session_record'):
         res_1_recorded = get_simple_query_results(conn)
-        res_5_recorded = get_simple_query_results(conn, 1) 
+        res_5_recorded = get_simple_query_results(conn, 1)
 
     assert(res_1 == res_1_recorded)
     assert(res_5 == res_5_recorded)
@@ -55,5 +55,4 @@ def test_frozen_session():
 
     with Session.play_data_source_record('temp/test_session_record'):
         assert(get_simple_query_results(conn) == [])
-
 

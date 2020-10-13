@@ -191,7 +191,7 @@ def plot_model(model,
                      rankdir=rankdir,
                      expand_nested=expand_nested,
                      dpi=dpi)
-  
+
   #to_file = path_to_string(to_file)
   if dot is None:
       return
@@ -207,10 +207,9 @@ def plot_model(model,
 
   if extension == 'svg':
       correct_weird_pydot_bug(to_file)
-  elif extension not in ('pdf', 'svg'): ## svg is useless here, but keptfor clarity
+  elif extension not in ('pdf', 'svg'): # svg is useless here, but kept for clarity
       try:
           from IPython import display
           return display.Image(filename=to_file)
       except ImportError:
           pass
-      

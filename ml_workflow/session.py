@@ -25,7 +25,7 @@ class Session:
         if path is None:
             now_as_file_compatible = dt.datetime.strftime(dt.datetime.now(), '%Y%m%d_%H%M%S')
             path = 'ml_workflow_frozen_session_{now_as_file_compatible}_{random.random.int(0,10000)}'
-        
+
         pathlib.Path(path).mkdir(parents=True, exist_ok=True)
         Session.last_record = path
 
@@ -39,5 +39,4 @@ class Session:
         assert(os.path.isdir(path))
 
         return SessionRecordContext(SessionRecordPlayer(path))
-        
 

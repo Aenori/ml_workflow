@@ -16,7 +16,7 @@ def handle_change(df, key):
         df.ml_workflow_current_node.add_modified_column(key)
     else:
         df.ml_workflow_current_node = WorkflowNodeRule(
-            current_rule, 
+            current_rule,
             df.ml_workflow_current_node,
             modified_column = key
         )
@@ -29,6 +29,6 @@ def handle_selection(df, key, other):
     current_rule = get_current_rule()
 
     other.ml_workflow_current_node = WorkflowNode(
-        current_rule, 
+        current_rule,
         df.ml_workflow_current_node
     )

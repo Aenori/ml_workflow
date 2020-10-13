@@ -1,30 +1,23 @@
 from ml_workflow.data_source import DataSource
 
 import pickle
-from . import utils
+from .abstract_session_recorder_player import AbstractSessionRecorderPlayer
 
-class SessionRecordPlayer:
+class SessionRecordPlayer(AbstractSessionRecorderPlayer):
     def __init__(self, path):
-        self.path = path
+        super().__init__(path)
+        self.load_data()
 
+    def load_data(self):
         with open(f'{self.path}/single_pickle_storage', 'rb') as f:
             self.args_recorded_list, self.res_recorded_list = pickle.load(f)
-        
-    def hook(self):
-        DataSource.__original_call = DataSource.call
-        DataSource.call = lambda *args, **kwargs : self.handle_data_source(*args, **kwargs)
 
-    def unhook(self):
-        DataSource.call = DataSource.__original_call
-        del DataSource.__original_call
+    def handle_data_source(self, data_source, *args, **kwargs):
+        assert(self.active)
+        args_recorded = self.clean_args(data_source, args, kwargs)
+        result_recorded = self.find_recorded_result(data_source, args_recorded)
 
-    def handle_data_source(self, data_source, *args, **kwargs):        
-        ds_recorded_args = self.args_recorded_list[data_source.get_qual_name()]
-        ds_recorded_res = self.res_recorded_list[data_source.get_qual_name()] 
+        if result_recorded is None:
+            raise Exception(f"For data source {data_source.name}, could not find args {args_recorded}")
 
-        args_recorded = utils.clean_args(data_source, args, kwargs)
-
-        if args_recorded not in ds_recorded_args:
-            raise Exception(f"For data source {data_source.name}, could not find args {args_recorded}") 
-        
-        return ds_recorded_res[ds_recorded_args.index(args_recorded)]
+        return result_recorded

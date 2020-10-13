@@ -5,4 +5,3 @@ def read_sql(*args, **kwargs):
 
 def override_pandas_functions():
     pass
-

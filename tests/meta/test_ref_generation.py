@@ -14,7 +14,7 @@ def delete_all_files_in_ref():
             os.remove(path_file)
             deleted_files.append(path_file)
 
-    return deleted_files 
+    return deleted_files
 
 def test_ref_generation():
     if os.environ.get('GENERATE_REF'):
@@ -37,6 +37,5 @@ def test_ref_generation():
     del os.environ['GENERATE_REF']
 
     test_viz_utils.test_plot_model_as_svg()
-    test_viz_utils.test_plot_model_as_png()    
-
+    test_viz_utils.test_plot_model_as_png()
 
