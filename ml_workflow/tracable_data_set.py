@@ -6,6 +6,8 @@ from . import dataframe_tracker
 pandas_class_to_wrapper = {}
 
 # Should be migrated to using metaclass
+
+
 def get_tracable_structure(klass):
     if klass in pandas_class_to_wrapper:
         return pandas_class_to_wrapper[klass]
@@ -32,7 +34,9 @@ def get_tracable_structure(klass):
 
     return TracableClass
 
+
 TracableDataFrame = get_tracable_structure(pd.DataFrame)
+
 
 def get_tracable_data_set(data_set):
     if isinstance(data_set, pd.DataFrame):

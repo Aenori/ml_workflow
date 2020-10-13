@@ -1,11 +1,19 @@
+import python_path
+
+from ml_workflow.data_source import mlwf_data_source
+from ml_workflow.session import Session
 import sqlite3
 
-from common_import import *
+import utils
+from ml_workflow.workflow_node import WorkflowNode
+import ml_workflow
+import pandas as pd
+import numpy as np
+import os
 
-from ml_workflow.session import Session
-from ml_workflow.data_source import mlwf_data_source
 
 TEMP_DB_NAME = 'temp_for_test.db'
+
 
 def set_up_fake_db():
     if os.path.isfile(TEMP_DB_NAME):
@@ -18,13 +26,17 @@ def set_up_fake_db():
 
     return conn
 
-@mlwf_data_source(name='Exemple_simple_query', source_type='db', source='fake', frozen_ignore_args=['conn'])
-def get_simple_query_results(conn, orig = 0):
+
+@mlwf_data_source(name='Exemple_simple_query', source_type='db',
+                  source='fake', frozen_ignore_args=['conn'])
+def get_simple_query_results(conn, orig=0):
     return conn.execute('SELECT * FROM fake').fetchall()[orig:]
+
 
 def clean_db(conn):
     conn.execute('DELETE FROM fake;')
     conn.commit()
+
 
 def test_frozen_session():
     conn = set_up_fake_db()
@@ -55,4 +67,3 @@ def test_frozen_session():
 
     with Session.play_data_source_record('temp/test_session_record'):
         assert(get_simple_query_results(conn) == [])
-

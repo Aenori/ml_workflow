@@ -1,5 +1,6 @@
 from ml_workflow.data_source import DataSource
 
+
 class AbstractSessionRecorderPlayer:
     def __init__(self, path):
         self.active = False
@@ -47,4 +48,3 @@ class AbstractSessionRecorderPlayer:
             return None
 
         return ds_recorded_res[ds_recorded_args.index(args_recorded)]
-

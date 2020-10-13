@@ -1,6 +1,7 @@
-from common_import import *
+import python_path
 
 from ml_workflow.data_source import mlwf_data_source
+
 
 def test_frozen_arguments_removal():
     @mlwf_data_source(

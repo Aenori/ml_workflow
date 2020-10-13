@@ -3,6 +3,7 @@ import pickle
 
 from .abstract_session_recorder_player import AbstractSessionRecorderPlayer
 
+
 class SessionRecorder(AbstractSessionRecorderPlayer):
     def __init__(self, path, use_json, try_json):
         super().__init__(path)
@@ -15,7 +16,10 @@ class SessionRecorder(AbstractSessionRecorderPlayer):
 
     def save(self):
         with open(f'{self.path}/single_pickle_storage', 'wb') as f:
-            pickle.dump((self.args_recorded_list, self.res_recorded_list), file = f)
+            pickle.dump(
+                (self.args_recorded_list, self.res_recorded_list),
+                file=f
+            )
 
     def handle_data_source(self, data_source, *args, **kwargs):
         assert(self.active)
@@ -26,10 +30,13 @@ class SessionRecorder(AbstractSessionRecorderPlayer):
         known_record = self.find_recorded_result(data_source, args_recorded)
         if known_record:
             if res != known_record:
-                raise Exception(f"Cannot record result, two differents results received from {data_source.name}")
+                raise Exception(f"Cannot record result, two differents"
+                                "results received from {data_source.name}")
         else:
-            ds_recorded_args = self.args_recorded_list[data_source.get_qual_name()]
-            ds_recorded_res = self.res_recorded_list[data_source.get_qual_name()]
+            ds_qual_name = data_source.get_qual_name()
+
+            ds_recorded_args = self.args_recorded_list[ds_qual_name]
+            ds_recorded_res = self.res_recorded_list[ds_qual_name]
 
             ds_recorded_args.append(args_recorded)
             ds_recorded_res.append(res)

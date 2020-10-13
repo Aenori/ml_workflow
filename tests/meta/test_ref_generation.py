@@ -1,9 +1,12 @@
 # This is not a unit test, we are testing ref generation
 import os
+import sys
+sys.path.append(os.getcwd())
 
 import tests.test_viz_utils as test_viz_utils
 
 NB_FILE_TO_DELETE = 2
+
 
 def delete_all_files_in_ref():
     deleted_files = []
@@ -15,6 +18,7 @@ def delete_all_files_in_ref():
             deleted_files.append(path_file)
 
     return deleted_files
+
 
 def test_ref_generation():
     if os.environ.get('GENERATE_REF'):
@@ -38,4 +42,3 @@ def test_ref_generation():
 
     test_viz_utils.test_plot_model_as_svg()
     test_viz_utils.test_plot_model_as_png()
-

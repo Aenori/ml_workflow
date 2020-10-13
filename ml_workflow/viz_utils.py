@@ -38,7 +38,6 @@ from __future__ import division
 
 from __future__ import print_function
 
- 
 
 import os
 
@@ -50,7 +49,6 @@ import sys
 
 # from tensorflow.python.util.tf_export import keras_export
 
- 
 
 try:
 
@@ -78,12 +76,8 @@ except ImportError:
 
             pydot = None
 
- 
-
- 
 
 def check_pydot():
-
     """Returns True if PyDot and Graphviz are available."""
 
     if pydot is None:
@@ -104,9 +98,6 @@ def check_pydot():
 
         return False
 
- 
-
- 
 
 def is_wrapped_model(layer):
 
@@ -116,11 +107,8 @@ def is_wrapped_model(layer):
 
     return (isinstance(layer, wrappers.Wrapper) and
 
-                    isinstance(layer.layer, functional.Functional))
+            isinstance(layer.layer, functional.Functional))
 
- 
-
- 
 
 def add_edge(dot, src, dst):
 
@@ -128,26 +116,22 @@ def add_edge(dot, src, dst):
 
         dot.add_edge(pydot.Edge(src, dst))
 
- 
-
- 
 
 # @keras_export('keras.utils.model_to_dot')
 
 def model_to_dot(model,
 
-                                  show_shapes=False,
+                 show_shapes=False,
 
-                                  show_layer_names=True,
+                 show_layer_names=True,
 
-                                  rankdir='TB',
+                 rankdir='TB',
 
-                                  expand_nested=False,
+                 expand_nested=False,
 
-                                  dpi=96,
+                 dpi=96,
 
-                                  subgraph=False):
-
+                 subgraph=False):
     """Convert a Keras model to dot format.
 
     Arguments:
@@ -190,15 +174,16 @@ def model_to_dot(model,
 
         message = (
 
-                'Failed to import pydot. You must `pip install pydot` '
+            'Failed to import pydot. You must `pip install pydot` '
 
-                'and install graphviz (https://graphviz.gitlab.io/download/), ',
+            'and install graphviz (https://graphviz.gitlab.io/download/), ',
 
-                'for `pydotprint` to work.')
+            'for `pydotprint` to work.')
 
         if 'IPython.core.magics.namespace' in sys.modules:
 
-            # We don't raise an exception here in order to avoid crashing notebook
+            # We don't raise an exception here in order to avoid crashing
+            # notebook
 
             # tests where graphviz is not available.
 
@@ -209,8 +194,6 @@ def model_to_dot(model,
         else:
 
             raise ImportError(message)
-
- 
 
     if subgraph:
 
@@ -232,8 +215,6 @@ def model_to_dot(model,
 
         dot.set_node_defaults(shape='record')
 
- 
-
     sub_n_first_node = {}
 
     sub_n_last_node = {}
@@ -242,19 +223,13 @@ def model_to_dot(model,
 
     sub_w_last_node = {}
 
- 
-
     layers = model.get_all_nodes()
-
- 
 
     for layer in layers:
 
-            node = pydot.Node(layer.get_str_id(), label=str(layer))
+        node = pydot.Node(layer.get_str_id(), label=str(layer))
 
-            dot.add_node(node)
-
- 
+        dot.add_node(node)
 
     # Connect nodes with edges.
 
@@ -264,54 +239,43 @@ def model_to_dot(model,
 
         for inbound_node in layer.parents:
 
-                    inbound_layer_id = inbound_node.get_str_id()
+            inbound_layer_id = inbound_node.get_str_id()
 
- 
+            assert dot.get_node(inbound_layer_id)
 
-                    assert dot.get_node(inbound_layer_id)
+            assert dot.get_node(layer_id)
 
-                    assert dot.get_node(layer_id)
-
-                    add_edge(dot, inbound_layer_id, layer_id)
-
- 
+            add_edge(dot, inbound_layer_id, layer_id)
 
     return dot
 
- 
 
 def correct_weird_pydot_bug(filename):
 
-        with open(filename, 'r') as f:
+    with open(filename, 'r') as f:
 
-                content = f.read().replace('scale(1.3333 1.3333) ', '')
+        content = f.read().replace('scale(1.3333 1.3333) ', '')
 
- 
+    with open(filename, 'w') as f:
 
-        with open(filename, 'w') as f:
+        f.write(content)
 
-                f.write(content)
-
- 
-
- 
 
 # @keras_export('keras.utils.plot_model')
 
 def plot_model(model,
 
-                              to_file='model.svg',
+               to_file='model.svg',
 
-                              show_shapes=False,
+               show_shapes=False,
 
-                              show_layer_names=True,
+               show_layer_names=True,
 
-                              rankdir='TB',
+               rankdir='TB',
 
-                              expand_nested=False,
+               expand_nested=False,
 
-                              dpi=96):
-
+               dpi=96):
     """Converts a Keras model to dot format and save to a file.
 
     Example:
@@ -374,56 +338,49 @@ def plot_model(model,
 
     dot = model_to_dot(model,
 
-                                          show_shapes=show_shapes,
+                       show_shapes=show_shapes,
 
-                                          show_layer_names=show_layer_names,
+                       show_layer_names=show_layer_names,
 
-                                          rankdir=rankdir,
+                       rankdir=rankdir,
 
-                                          expand_nested=expand_nested,
+                       expand_nested=expand_nested,
 
-                                          dpi=dpi)
-
- 
+                       dpi=dpi)
 
     #to_file = path_to_string(to_file)
 
     if dot is None:
 
-            return
-
- 
+        return
 
     _, extension = os.path.splitext(to_file)
 
     if not extension:
 
-            extension = 'png'
+        extension = 'png'
 
     else:
 
-            extension = extension[1:]
-
- 
+        extension = extension[1:]
 
     # Save image to disk.
 
     dot.write(to_file, format=extension)
 
- 
-
     if extension == 'svg':
 
-            correct_weird_pydot_bug(to_file)
+        correct_weird_pydot_bug(to_file)
 
-    elif extension not in ('pdf', 'svg'): # svg is useless here, but kept for clarity
+    # svg is useless here, but kept for clarity
+    elif extension not in ('pdf', 'svg'):
 
-            try:
+        try:
 
-                    from IPython import display
+            from IPython import display
 
-                    return display.Image(filename=to_file)
+            return display.Image(filename=to_file)
 
-            except ImportError:
+        except ImportError:
 
-                    pass
+            pass

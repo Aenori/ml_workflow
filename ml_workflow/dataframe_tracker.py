@@ -5,6 +5,7 @@ from .context_utils import get_current_rule
 
 from .function_utils import prevent_exception
 
+
 @prevent_exception
 def handle_change(df, key):
     if df.ml_workflow_current_node is None:
@@ -18,10 +19,12 @@ def handle_change(df, key):
         df.ml_workflow_current_node = WorkflowNodeRule(
             current_rule,
             df.ml_workflow_current_node,
-            modified_column = key
+            modified_column=key
         )
 
 # @prevent_exception
+
+
 def handle_selection(df, key, other):
     if df.ml_workflow_current_node is None:
         df.ml_workflow_current_node = get_user_code_origine_workflow()

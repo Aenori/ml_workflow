@@ -3,6 +3,7 @@ from ml_workflow.data_source import DataSource
 import pickle
 from .abstract_session_recorder_player import AbstractSessionRecorderPlayer
 
+
 class SessionRecordPlayer(AbstractSessionRecorderPlayer):
     def __init__(self, path):
         super().__init__(path)
@@ -18,6 +19,7 @@ class SessionRecordPlayer(AbstractSessionRecorderPlayer):
         result_recorded = self.find_recorded_result(data_source, args_recorded)
 
         if result_recorded is None:
-            raise Exception(f"For data source {data_source.name}, could not find args {args_recorded}")
+            raise Exception(
+                f"For data source {data_source.name}, could not find args {args_recorded}")
 
         return result_recorded

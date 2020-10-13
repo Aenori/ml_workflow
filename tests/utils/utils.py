@@ -1,5 +1,6 @@
 import os
 
+
 def compare_or_generate_ref(filename):
     try:
         with open(filename, 'rb') as output:
@@ -12,6 +13,7 @@ def compare_or_generate_ref(filename):
     finally:
         if os.path.isfile(filename):
             os.remove(filename)
+
 
 class CheckRaisedError:
     def __enter__(self):

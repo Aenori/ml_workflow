@@ -5,10 +5,11 @@
 from enum import Enum
 import itertools
 
+
 class WorkflowNode:
     next_id = 1
 
-    def __init__(self, origin, parents = []):
+    def __init__(self, origin, parents=[]):
         self.origin = origin
 
         self.id = WorkflowNode.next_id
@@ -34,7 +35,8 @@ class WorkflowNode:
 
     def get_previous_node(self):
         if self.has_multiple_parents():
-            raise Exception("Attempt to call get_previous_node on node with several parents")
+            raise Exception(
+                "Attempt to call get_previous_node on node with several parents")
 
         if self.parents:
             return self.parents[0]
@@ -47,8 +49,9 @@ class WorkflowNode:
             res.extend(parent.get_all_nodes())
         return res
 
+
 class WorkflowNodeRule(WorkflowNode):
-    def __init__(self, rule, parents = [], modified_column = None):
+    def __init__(self, rule, parents=[], modified_column=None):
         super().__init__(rule, parents)
         self.modified_columns = set()
         if modified_column is not None:
@@ -62,8 +65,10 @@ class WorkflowNodeRule(WorkflowNode):
         else:
             raise Exception(f'Unknown column type {type(column)}')
 
+
 class SpecialOrigin(Enum):
     USER_CODE = 0
+
 
 def get_user_code_origine_workflow():
     return WorkflowNode(SpecialOrigin.USER_CODE)
