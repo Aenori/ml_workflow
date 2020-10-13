@@ -19,6 +19,8 @@ class WorkflowNode:
             self.parents = parents
         elif isinstance(parents, WorkflowNode):
             self.parents = [parents]
+        else:
+            raise Exception(f"Invalid parents : {type(parents)}, {parents}")
 
     def __str__(self):
         return str(self.origin)

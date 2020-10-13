@@ -25,8 +25,15 @@ def get_tracable_structure(klass):
 
         def __getitem__(self, key):
             orig_res = super().__getitem__(key)
+            return self.__handle_new_df_return(orig_res, parents=[self], key=key)
+
+        def merge(self, right, *args, **kwargs):
+            orig_res = super().merge(right, *args, **kwargs)
+            return self.__handle_new_df_return(orig_res, parents=[self, right])
+        
+        def __handle_new_df_return(self, orig_res, parents, key=None):
             res = get_tracable_structure(orig_res.__class__)(orig_res)
-            dataframe_tracker.handle_selection(self, key, res)
+            dataframe_tracker.handle_selection(self, res, parents, key)
 
             return res
 

@@ -50,3 +50,14 @@ def test_tracable_data_set_extract():
     assert(isinstance(df_extract, TracableDataFrame))
 
     assert(df_extract.ml_workflow_current_node.get_graph_size() == 2)
+
+def test_merge():
+    df1 = TracableDataFrame({'Id': [1,2], 'Age': [1, 67]})
+    df2 = TracableDataFrame({'Id': [1,2], 'Size': [45, 167]})
+
+    df3 = df1.merge(df2)
+    assert(isinstance(df3, TracableDataFrame))
+    print(df3.ml_workflow_current_node.parents)
+    assert(len(df3.ml_workflow_current_node.parents) == 2)
+    assert(df3.ml_workflow_current_node.get_graph_size() == 3)
+

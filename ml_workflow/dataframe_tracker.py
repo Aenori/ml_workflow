@@ -22,16 +22,22 @@ def handle_change(df, key):
             modified_column=key
         )
 
-# @prevent_exception
 
 
-def handle_selection(df, key, other):
-    if df.ml_workflow_current_node is None:
-        df.ml_workflow_current_node = get_user_code_origine_workflow()
+@prevent_exception
+def handle_selection(df, result, parents, key=None):
+    for parent in parents:
+        if parent.ml_workflow_current_node is None:
+            parent.ml_workflow_current_node = get_user_code_origine_workflow()
 
     current_rule = get_current_rule()
 
-    other.ml_workflow_current_node = WorkflowNode(
+    result.ml_workflow_current_node = WorkflowNode(
         current_rule,
-        df.ml_workflow_current_node
+        parents=[parent.ml_workflow_current_node for parent in parents]
     )
+
+    if key:
+        result.ml_workflow_current_node.selection_key = key
+
+    result.ml_workflow_current_node.outside_len = len(df)
