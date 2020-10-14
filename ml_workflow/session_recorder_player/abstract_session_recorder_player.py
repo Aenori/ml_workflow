@@ -12,6 +12,9 @@ class AbstractSessionRecorderPlayer:
 
     @staticmethod
     def clean_args(data_source, args, kwargs):
+        if not hasattr(data_source, 'frozen_ignore_args_positions'):
+            return args, kwargs
+
         args = list(args)
         for index in data_source.frozen_ignore_args_positions:
             if index < len(args):

@@ -16,10 +16,19 @@ class SessionRecorder(AbstractSessionRecorderPlayer):
 
     def save(self):
         with open(f'{self.path}/single_pickle_storage', 'wb') as f:
-            pickle.dump(
-                (self.args_recorded_list, self.res_recorded_list),
-                file=f
-            )
+            try:
+                pickle.dump(
+                    (self.args_recorded_list, self.res_recorded_list),
+                    file=f
+                )
+            except Exception as e:
+                for name, record in self.args_recorded_list.items():
+                    print(f"Records for source : {name}")
+
+                    for arg, result in zip(record, self.res_recorded_list[name]):
+                        print(f"  {arg} => {type(result)}")
+
+                raise e
 
     def handle_data_source(self, data_source, *args, **kwargs):
         assert(self.active)
