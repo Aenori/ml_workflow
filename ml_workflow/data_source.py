@@ -24,7 +24,10 @@ class DataSource(WorkflowTracable):
     # This function can be mocked by the session_recorder and
     # session_record_player
     def call(self, *args, **kwargs):
-        return get_tracable_data_set(super().__call__(*args, **kwargs))
+        result = get_tracable_data_set(super().__call__(*args, **kwargs))
+        result.set_workflow_origin(self)
+
+        return result
 
     # Will probably include the version later on
     def get_qual_name(self):

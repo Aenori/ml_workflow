@@ -3,6 +3,7 @@ import pandas as pd
 from . import execution_context
 from . import dataframe_tracker
 
+from .workflow_node import WorkflowNode
 pandas_class_to_wrapper = {}
 
 # Should be migrated to using metaclass
@@ -37,6 +38,19 @@ def get_tracable_structure(klass):
 
             return res
 
+        def plot_model(self, filename):
+            from .viz_utils import plot_model
+            return plot_model(self.ml_workflow_current_node, filename)
+
+        def set_workflow_origin(self, workflow_tracable, parents = None):
+            if parents is None:
+                parents = []
+
+            self.ml_workflow_current_node = WorkflowNode(
+                workflow_tracable,
+                parents=parents
+            )
+
     pandas_class_to_wrapper[klass] = TracableClass
 
     return TracableClass
@@ -44,11 +58,25 @@ def get_tracable_structure(klass):
 
 TracableDataFrame = get_tracable_structure(pd.DataFrame)
 
+class TracableList(list):
+    def set_workflow_origin(self, workflow_tracable, parents = None):
+        if parents is None:
+            parents = []
+
+        self.ml_workflow_current_node = WorkflowNode(
+            workflow_tracable,
+            parents=parents
+        )    
+
+    def __eq__(self, other):
+        return super().__eq__(other)
+
+    def __getstate__(self):
+        return {'values' : list(self)}
 
 def get_tracable_data_set(data_set):
     if isinstance(data_set, pd.DataFrame):
         return TracableDataFrame(data_set)
-    if isinstance(data_set, (list, dict)):
-        # TODO
-        return data_set
+    if isinstance(data_set, list):
+        return TracableList(data_set)
     raise Exception('Unknown source type')

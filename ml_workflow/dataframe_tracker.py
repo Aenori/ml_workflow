@@ -23,7 +23,6 @@ def handle_change(df, key):
         )
 
 
-
 @prevent_exception
 def handle_selection(df, result, parents, key=None):
     for parent in parents:
@@ -32,12 +31,12 @@ def handle_selection(df, result, parents, key=None):
 
     current_rule = get_current_rule()
 
-    result.ml_workflow_current_node = WorkflowNode(
+    result.set_workflow_origin(
         current_rule,
         parents=[parent.ml_workflow_current_node for parent in parents]
     )
 
-    if key:
+    if key is not None:
         result.ml_workflow_current_node.selection_key = key
 
     result.ml_workflow_current_node.outside_len = len(df)

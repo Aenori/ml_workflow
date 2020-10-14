@@ -100,11 +100,14 @@ def create_nodes(layers, dot):
 SHAPE_BY_CLASS = {
     Rule : 'diamond',
     DataSource : 'oval',
-    str: 'rectangle'
+    'default': 'rectangle'
 }
 
 def get_shape(origin):
-    return SHAPE_BY_CLASS[origin.__class__]
+    try:
+        return SHAPE_BY_CLASS[origin.__class__]
+    except:
+        return SHAPE_BY_CLASS['default']
 
 def get_color(origin):
     try:

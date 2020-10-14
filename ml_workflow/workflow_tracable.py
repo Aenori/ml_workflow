@@ -25,6 +25,9 @@ class WorkflowTracable:
 
         return res
 
+    def __str__(self):
+        return self.name
+
     def __enter__(self):
         execution_context.notify_entry(self)
 
