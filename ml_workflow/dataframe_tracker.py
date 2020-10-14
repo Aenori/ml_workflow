@@ -39,4 +39,4 @@ def handle_selection(df, result, parents, key=None):
     if key is not None:
         result.ml_workflow_current_node.selection_key = key
 
-    result.ml_workflow_current_node.outside_len = len(df)
+    result.ml_workflow_current_node.outside_len = len(result)

@@ -57,7 +57,6 @@ def test_merge():
 
     df3 = df1.merge(df2)
     assert(isinstance(df3, TracableDataFrame))
-    print(df3.ml_workflow_current_node.parents)
     assert(len(df3.ml_workflow_current_node.parents) == 2)
     assert(df3.ml_workflow_current_node.get_graph_size() == 3)
 

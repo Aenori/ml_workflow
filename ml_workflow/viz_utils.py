@@ -83,13 +83,18 @@ def raise_error_if_no_pydot():
         else:
             raise ImportError(message)
 
+def get_label(layer):
+    label = str(layer)
+    if hasattr(layer, 'outside_len'):
+        label += f"\nsize : {layer.outside_len}"
+    return label
 
 def create_nodes(layers, dot):
     for layer in layers:
         origin = layer.origin 
         node = pydot.Node(
             layer.get_str_id(), 
-            label=str(layer), 
+            label=get_label(layer), 
             # Temporary for demo
             URL=f"http://www.google.fr/?q={layer}",
             shape=get_shape(origin),

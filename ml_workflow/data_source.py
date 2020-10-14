@@ -23,6 +23,7 @@ class DataSource(WorkflowTracable):
 
         result = get_tracable_data_set(result)
         result.set_workflow_origin(self)
+        result.ml_workflow_current_node.outside_len = len(result)
 
         return result
 
