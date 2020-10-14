@@ -3,7 +3,7 @@ from . import execution_context
 
 
 class WorkflowTracable:
-    AUTHORISED_ATTR = set(['name'])
+    AUTHORISED_ATTR = set(['name', 'highlight'])
 
     def __init__(self, source_function=None, **kwargs):
         self.source_function = source_function

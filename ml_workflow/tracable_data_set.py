@@ -71,9 +71,6 @@ class TracableList(list):
     def __eq__(self, other):
         return super().__eq__(other)
 
-    def __getstate__(self):
-        return {'values' : list(self)}
-
 def get_tracable_data_set(data_set):
     if isinstance(data_set, pd.DataFrame):
         return TracableDataFrame(data_set)
