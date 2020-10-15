@@ -38,7 +38,7 @@ def get_tracable_structure(klass):
 
             return res
 
-        def plot_model(self, filename):
+        def plot_model(self, filename='temp_graph.png'):
             from .viz_utils import plot_model
             return plot_model(self.ml_workflow_current_node, filename)
 

@@ -31,10 +31,13 @@ def handle_selection(df, result, parents, key=None):
 
     current_rule = get_current_rule()
 
-    result.set_workflow_origin(
-        current_rule,
-        parents=[parent.ml_workflow_current_node for parent in parents]
-    )
+    if (len(parents) == 1) and parents[0].ml_workflow_current_node.origin == current_rule:
+        result.ml_workflow_current_node = parents[0].ml_workflow_current_node
+    else:
+        result.set_workflow_origin(
+            current_rule,
+            parents=[parent.ml_workflow_current_node for parent in parents]
+        )
 
     if key is not None:
         result.ml_workflow_current_node.selection_key = key
