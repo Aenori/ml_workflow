@@ -7,7 +7,14 @@ from .workflow_node import WorkflowNode
 pandas_class_to_wrapper = {}
 
 # Should be migrated to using metaclass
-
+def add_notification_to(cls, method_name):
+    super_method = getattr(cls.__bases__[0], method_name)
+    
+    def tracable_method(self, *args, **kwargs):
+        print('foo')
+        return super_method(self, *args, **kwargs)
+    
+    setattr(cls, method_name, tracable_method)
 
 def get_tracable_structure(klass):
     if klass in pandas_class_to_wrapper:

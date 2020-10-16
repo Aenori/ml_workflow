@@ -7,21 +7,19 @@ import itertools
 
 
 class WorkflowNode:
-    next_id = 1
+    _next_id = 0
+
+    @classmethod
+    def get_next_id(cls):
+        cls._next_id += 1
+        
+        return cls._next_id
 
     def __init__(self, origin, parents=[]):
         self.origin = origin
-
-        self.id = WorkflowNode.next_id
-        WorkflowNode.next_id += 1
-
-        if isinstance(parents, list):
-            self.parents = parents
-        elif isinstance(parents, WorkflowNode):
-            self.parents = [parents]
-        else:
-            raise Exception(f"Invalid parents : {type(parents)}, {parents}")
-
+        self.id = self.get_next_id()
+        self.parents = parents if isinstance(parents, list) else [parents]
+        
     def __str__(self):
         return str(self.origin)
 

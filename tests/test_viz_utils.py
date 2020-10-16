@@ -29,7 +29,7 @@ def test_check_pydot():
 
 @ReferenceUsingTest('test_regression.svg')
 def test_plot_model_as_svg():
-    WorkflowNode.next_id = 1
+    WorkflowNode._next_id = 0
     _test_plot_model('test_regression.svg')
 
 
