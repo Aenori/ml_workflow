@@ -53,6 +53,9 @@ class WorkflowNode:
             res.extend(parent.get_all_nodes())
         return res
 
+    def check_constraints(self):
+        self.valid = self.origin.check_constraints([parent.origin for parent in self.get_all_nodes() if parent is not None])
+        return self.valid
 
 class WorkflowNodeRule(WorkflowNode):
     def __init__(self, rule, parents=[], modified_column=None):

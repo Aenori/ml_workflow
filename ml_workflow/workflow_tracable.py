@@ -1,6 +1,9 @@
 import inspect
 from . import execution_context
 
+from .tracable_data_set import get_tracable_data_set
+import pandas as pd
+
 import logging
 logger = logging.getLogger(__name__)
 
@@ -29,6 +32,15 @@ class WorkflowTracable:
         with self:
             res = self.source_function(*args, **kwargs)
 
+        if isinstance(res, pd.DataFrame):
+            res = get_tracable_data_set(res)
+
+        if (res.ml_workflow_current_node is None) or (res.ml_workflow_current_node.origin is not self):
+            res.set_workflow_origin(
+                self,
+                parents=[res.ml_workflow_current_node]
+            )
+
         return res
 
     def __str__(self):
@@ -51,3 +63,23 @@ class WorkflowTracable:
 
     def get_authorized_attr(self):
         return self.__class__.AUTHORISED_ATTR
+
+    def _get_constraints(self):
+        if not hasattr(self, 'constraints'):
+            return []
+        elif not isinstance(self.constraints, list):
+            return [self.constraints]
+        return self.constraints
+
+    def check_constraints(self, previous_nodes):
+        if len(self._get_constraints()):
+            return all(c.check(self, previous_nodes) for c in self._get_constraints())
+        else:
+            return True
+
+    def match(self, wf_tracable_ref):
+        if isinstance(wf_tracable_ref, str):
+            return self.name == wf_tracable_ref
+        else:
+            print((self.name, wf_tracable_ref.name))
+            return self is wf_tracable_ref

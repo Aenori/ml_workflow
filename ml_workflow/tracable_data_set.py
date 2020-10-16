@@ -1,13 +1,13 @@
 import pandas as pd
 
 from . import execution_context
-from . import dataframe_tracker
 
 from .workflow_node import WorkflowNode
 pandas_class_to_wrapper = {}
 
 # Should be migrated to using metaclass
-
+class AbstractTracableClass:
+    pass
 
 def get_tracable_structure(klass):
     if klass in pandas_class_to_wrapper:
@@ -21,7 +21,7 @@ def get_tracable_structure(klass):
             self.ml_workflow_current_node = None
 
         def __setitem__(self, key, value):
-            dataframe_tracker.handle_change(self, key)
+            AbstractTracableClass.dataframe_tracker.handle_change(self, key)
             return super().__setitem__(key, value)
 
         def __getitem__(self, key):
@@ -34,7 +34,7 @@ def get_tracable_structure(klass):
         
         def __handle_new_df_return(self, orig_res, parents, key=None):
             res = get_tracable_structure(orig_res.__class__)(orig_res)
-            dataframe_tracker.handle_selection(self, res, parents, key)
+            AbstractTracableClass.dataframe_tracker.handle_selection(self, res, parents, key)
 
             return res
 
@@ -50,6 +50,9 @@ def get_tracable_structure(klass):
                 workflow_tracable,
                 parents=parents
             )
+
+        def check_workflow(self):
+            self.is_valid = self.ml_workflow_current_node.check_constraints()
 
     pandas_class_to_wrapper[klass] = TracableClass
 

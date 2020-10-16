@@ -5,6 +5,8 @@ from .context_utils import get_current_rule
 
 from .function_utils import prevent_exception
 
+from tracable_data_set import AbstractTracableClass
+
 
 @prevent_exception
 def handle_change(df, key):
@@ -43,3 +45,5 @@ def handle_selection(df, result, parents, key=None):
         result.ml_workflow_current_node.selection_key = key
 
     result.ml_workflow_current_node.outside_len = len(result)
+
+AbstractTracableClass.dataframe_tracker = self
