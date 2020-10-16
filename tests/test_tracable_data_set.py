@@ -11,7 +11,7 @@ import os
 import sys
 
 
-@ml_workflow.rule
+@ml_workflow.rule.Rule(name='fake')
 def set_is_old_from_age(df):
     df['IsOld'] = df['Age'] > 60
 

@@ -76,4 +76,4 @@ def get_tracable_data_set(data_set):
         return TracableDataFrame(data_set)
     if isinstance(data_set, list):
         return TracableList(data_set)
-    raise Exception('Unknown source type')
+    raise Exception(f'Unknown source type {type(data_set)}')

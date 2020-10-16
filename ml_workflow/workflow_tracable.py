@@ -1,12 +1,14 @@
 import inspect
 from . import execution_context
 
+import logging
+logger = logging.getLogger(__name__)
 
 class WorkflowTracable:
     AUTHORISED_ATTR = set(['name', 'highlight'])
 
-    def __init__(self, source_function=None, **kwargs):
-        self.source_function = source_function
+    def __init__(self, **kwargs):
+        self.source_function = None
 
         if not (set(kwargs.keys()) <= self.get_authorized_attr()):
             unauthorised_keys = set(kwargs.keys()) - self.get_authorized_attr()
@@ -16,10 +18,14 @@ class WorkflowTracable:
 
         self.__dict__.update(kwargs)
 
-        if 'name' not in kwargs:
-            self.name = source_function.__name__
-
     def __call__(self, *args, **kwargs):
+        if self.source_function is None:
+            self.call_as_decorator(*args, **kwargs)
+            return self
+
+        return self.call(*args, **kwargs)
+
+    def call(self, *args, **kwargs):
         with self:
             res = self.source_function(*args, **kwargs)
 
@@ -34,19 +40,14 @@ class WorkflowTracable:
     def __exit__(self, type, value, traceback):
         execution_context.notify_exit(self)
 
+    def call_as_decorator(self, *args, **kwargs):
+        if ((len(args) != 1) or (len(kwargs) != 0)):
+            logger.warning('First call of a Rule / DataSource should be as a decorator')    
+        
+        self.source_function = args[0]
+
     def get_source(self):
         return inspect.getsource(self.source_function)
 
     def get_authorized_attr(self):
         return self.__class__.AUTHORISED_ATTR
-
-class WorkflowTracableDecorator:
-    def __init__(self, klass):
-        self.klass = klass
-
-    def __call__(self, *args, **kwargs):
-        if len(args) == 0:
-            return lambda f: self(f, **kwargs)
-        assert(len(args) == 1)
-
-        return self.klass(*args, **kwargs)

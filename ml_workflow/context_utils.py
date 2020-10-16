@@ -1,8 +1,8 @@
 from . import execution_context
 from .rule import Rule
 
-no_context_rule = Rule(source_function=None, name='Unspecified rule')
-not_a_rule_context = Rule(source_function=None, name='not_a_rule_context')
+no_context_rule = Rule(name='Unspecified rule')
+not_a_rule_context = Rule(name='not_a_rule_context')
 
 
 def get_current_rule():

@@ -1,4 +1,4 @@
-from .rule import rule
-from .data_source import mlwf_data_source
+from .rule import Rule
+from .data_source import DataSource
 
 from . import pandas_link

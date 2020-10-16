@@ -1,6 +1,6 @@
 import python_path
 
-from ml_workflow.data_source import mlwf_data_source
+from ml_workflow.data_source import DataSource
 from ml_workflow.session import Session
 import sqlite3
 
@@ -27,8 +27,8 @@ def set_up_fake_db():
     return conn
 
 
-@mlwf_data_source(name='Exemple_simple_query', source_type='db',
-                  source='fake', frozen_ignore_args=['conn'])
+@DataSource(name='Exemple_simple_query', source_type='db',
+            source='fake', frozen_ignore_args=['conn'])
 def get_simple_query_results(conn, orig=0):
     return conn.execute('SELECT * FROM fake').fetchall()[orig:]
 
@@ -67,3 +67,4 @@ def test_frozen_session():
 
     with Session.play_data_source_record('temp/test_session_record'):
         assert(get_simple_query_results(conn) == [])
+

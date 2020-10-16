@@ -1,10 +1,10 @@
 import python_path
 
-from ml_workflow.data_source import mlwf_data_source
+from ml_workflow.data_source import DataSource
 
 
 def test_frozen_arguments_removal():
-    @mlwf_data_source(
+    @DataSource(
         name='Exemple_simple_query',
         source_type='db',
         source='fake',

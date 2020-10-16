@@ -1,4 +1,4 @@
-from .workflow_tracable import WorkflowTracable, WorkflowTracableDecorator
+from .workflow_tracable import WorkflowTracable
 from .tracable_data_set import get_tracable_data_set
 
 
@@ -7,19 +7,8 @@ class DataSource(WorkflowTracable):
         set(['frozen_ignore_args', 'source_type', 'source'])
     )
 
-    def __init__(self, source_function, **kwargs):
-        super().__init__(source_function, **kwargs)
-
-        if 'frozen_ignore_args' in kwargs:
-            self.frozen_ignore_args_positions = [
-                source_function.__code__.co_varnames.index(arg)
-                for arg in kwargs['frozen_ignore_args']
-            ]
-            # This is important, we will be removing these arguments
-            self.frozen_ignore_args_positions.sort(reverse=True)
-
-    def __call__(self, *args, **kwargs):
-        result = self.call(*args, **kwargs)
+    def call(self, *args, **kwargs):
+        result = self.hookable_call(*args, **kwargs)
 
         result = get_tracable_data_set(result)
         result.set_workflow_origin(self)
@@ -29,12 +18,24 @@ class DataSource(WorkflowTracable):
 
     # This function can be mocked by the session_recorder and
     # session_record_player
-    def call(self, *args, **kwargs):
-        return super().__call__(*args, **kwargs)
+    def hookable_call(self, *args, **kwargs):
+        return super().call(*args, **kwargs)
 
     # Will probably include the version later on
     def get_qual_name(self):
         return self.name
 
+    def call_as_decorator(self, *args, **kwargs):
+        super().call_as_decorator(*args, **kwargs)
 
-mlwf_data_source = WorkflowTracableDecorator(DataSource)
+        if hasattr(self, 'frozen_ignore_args'):
+            self.handle_frozen_ignore_args(self.frozen_ignore_args)
+
+    def handle_frozen_ignore_args(self, frozen_ignore_args):
+        self.frozen_ignore_args_positions = [
+                self.source_function.__code__.co_varnames.index(arg)
+                for arg in frozen_ignore_args
+            ]
+        
+        # This is important, we will be removing these arguments
+        self.frozen_ignore_args_positions.sort(reverse=True)

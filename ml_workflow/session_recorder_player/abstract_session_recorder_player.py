@@ -28,18 +28,18 @@ class AbstractSessionRecorderPlayer:
         return args, kwargs
 
     def hook(self):
-        DataSource.__original_call = DataSource.call
+        DataSource.__original_call = DataSource.hookable_call
         this = self
 
         def hooked_call(*args, **kwargs):
             assert(this.active)
             return this.handle_data_source(*args, **kwargs)
 
-        DataSource.call = hooked_call
+        DataSource.hookable_call = hooked_call
         self.active = True
 
     def unhook(self):
-        DataSource.call = DataSource.__original_call
+        DataSource.hookable_call = DataSource.__original_call
         del DataSource.__original_call
         self.active = False
 
