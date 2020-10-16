@@ -1,67 +1,45 @@
 import pandas as pd
-
-from . import execution_context
-from . import dataframe_tracker
+from .viz_utils import plot_model
 
 from .workflow_node import WorkflowNode
+from .workflow_node import get_user_code_origine_workflow
+
+class TracableDataSetUtils:
+    def plot_model(self, filename='temp_graph.png'):
+        return plot_model(self.ml_workflow_node, filename)
+
+    def get_workflow_origin(self):
+        if self.ml_workflow_node is None:
+            return None
+
+        return self.ml_workflow_node.origin
+
+    def set_workflow_origin(self, workflow_tracable, parents = None):
+        if parents is None:
+            parents = []
+
+        self.ml_workflow_node = WorkflowNode(
+            workflow_tracable,
+            parents=parents
+        )
+
+    def set_default_ml_workflow_node_if_isnt_any(self):
+        if self.ml_workflow_node is None:
+            self.ml_workflow_node = get_user_code_origine_workflow()
+
+
 pandas_class_to_wrapper = {}
 
-# Should be migrated to using metaclass
-def add_notification_to(cls, method_name):
-    super_method = getattr(cls.__bases__[0], method_name)
-    
-    def tracable_method(self, *args, **kwargs):
-        print('foo')
-        return super_method(self, *args, **kwargs)
-    
-    setattr(cls, method_name, tracable_method)
-
 def get_tracable_structure(klass):
-    if klass in pandas_class_to_wrapper:
-        return pandas_class_to_wrapper[klass]
+    if klass not in pandas_class_to_wrapper:
+        class TracableDataSetInstance(klass, TracableDataSetUtils):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                self.ml_workflow_node = None
 
-    class TracableClass(klass):
-        def __init__(self, *args, **kwargs):
-            # Here we are assuming that no pandas object is making deep copy
-            # when passed its own type
-            super().__init__(*args, **kwargs)
-            self.ml_workflow_current_node = None
+        pandas_class_to_wrapper[klass] = TracableDataSetInstance
 
-        def __setitem__(self, key, value):
-            dataframe_tracker.handle_change(self, key)
-            return super().__setitem__(key, value)
-
-        def __getitem__(self, key):
-            orig_res = super().__getitem__(key)
-            return self.__handle_new_df_return(orig_res, parents=[self], key=key)
-
-        def merge(self, right, *args, **kwargs):
-            orig_res = super().merge(right, *args, **kwargs)
-            return self.__handle_new_df_return(orig_res, parents=[self, right])
-        
-        def __handle_new_df_return(self, orig_res, parents, key=None):
-            res = get_tracable_structure(orig_res.__class__)(orig_res)
-            dataframe_tracker.handle_selection(self, res, parents, key)
-
-            return res
-
-        def plot_model(self, filename='temp_graph.png'):
-            from .viz_utils import plot_model
-            return plot_model(self.ml_workflow_current_node, filename)
-
-        def set_workflow_origin(self, workflow_tracable, parents = None):
-            if parents is None:
-                parents = []
-
-            self.ml_workflow_current_node = WorkflowNode(
-                workflow_tracable,
-                parents=parents
-            )
-
-    pandas_class_to_wrapper[klass] = TracableClass
-
-    return TracableClass
-
+    return pandas_class_to_wrapper[klass]
 
 TracableDataFrame = get_tracable_structure(pd.DataFrame)
 
@@ -70,7 +48,7 @@ class TracableList(list):
         if parents is None:
             parents = []
 
-        self.ml_workflow_current_node = WorkflowNode(
+        self.ml_workflow_node = WorkflowNode(
             workflow_tracable,
             parents=parents
         )    

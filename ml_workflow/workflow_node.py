@@ -53,19 +53,17 @@ class WorkflowNode:
 
 
 class WorkflowNodeRule(WorkflowNode):
-    def __init__(self, rule, parents=[], modified_column=None):
+    def __init__(self, rule, parents=[]):
         super().__init__(rule, parents)
-        self.modified_columns = set()
-        if modified_column is not None:
-            self.add_modified_column(modified_column)
+        self.modified_keys = set()
 
-    def add_modified_column(self, column):
-        if isinstance(column, (int, str)):
-            self.modified_columns.add(column)
-        elif isinstance(column, (list, set)):
-            self.modified_columns.update(column)
+    def add_modified_key(self, key):
+        if isinstance(key, (int, str)):
+            self.modified_keys.add(key)
+        elif isinstance(key, (list, set)):
+            self.modified_keys.update(key)
         else:
-            raise Exception(f'Unknown column type {type(column)}')
+            raise Exception(f'Unknown key type {type(key)}')
 
 
 class SpecialOrigin(Enum):

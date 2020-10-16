@@ -26,18 +26,18 @@ def test_tracable_data_set():
 
     assert(set(df.columns) == set(
         ['Age', 'IsYoung', 'IsOld', 'DansLaQuarantaine']))
-    assert(df.ml_workflow_current_node.get_graph_size() == 4)
+    assert(df.ml_workflow_node.get_graph_size() == 4)
 
-    assert(df.ml_workflow_current_node.origin is no_context_rule)
-    assert(df.ml_workflow_current_node.modified_columns ==
+    assert(df.ml_workflow_node.origin is no_context_rule)
+    assert(df.ml_workflow_node.modified_keys ==
            set(['IsYoung', 'DansLaQuarantaine']))
 
-    node = df.ml_workflow_current_node.get_previous_node()
+    node = df.ml_workflow_node.get_previous_node()
     assert(node.origin is set_is_old_from_age)
-    assert(node.modified_columns == set(['IsOld']))
+    assert(node.modified_keys == set(['IsOld']))
 
     node = node.get_previous_node()
-    assert(node.modified_columns == set(['Age']))
+    assert(node.modified_keys == set(['Age']))
 
     node = node.get_previous_node()
     assert(node.get_previous_node() is None)
@@ -49,7 +49,7 @@ def test_tracable_data_set_extract():
     assert(len(df_extract) == 2)
     assert(isinstance(df_extract, TracableDataFrame))
 
-    assert(df_extract.ml_workflow_current_node.get_graph_size() == 2)
+    assert(df_extract.ml_workflow_node.get_graph_size() == 2)
 
 def test_merge():
     df1 = TracableDataFrame({'Id': [1,2], 'Age': [1, 67]})
@@ -57,6 +57,9 @@ def test_merge():
 
     df3 = df1.merge(df2)
     assert(isinstance(df3, TracableDataFrame))
-    assert(len(df3.ml_workflow_current_node.parents) == 2)
-    assert(df3.ml_workflow_current_node.get_graph_size() == 3)
+    assert(len(df3.ml_workflow_node.parents) == 2)
+    assert(df3.ml_workflow_node.get_graph_size() == 3)
 
+def test_tracable_data_set_init():
+    df = TracableDataFrame({'Age': [1, 67, 89, 10, 20]})
+    assert(df.ml_workflow_node is None)
