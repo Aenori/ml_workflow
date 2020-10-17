@@ -1,1 +1,4 @@
-testfixtures
+notebook
+numpy
+pandas
+pydot

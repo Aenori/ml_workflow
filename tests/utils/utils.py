@@ -7,8 +7,14 @@ def compare_or_generate_ref(filename):
             with open(f'tests/ref/{filename}', 'wb') as ref:
                 ref.write(output.read())
         else:
-            with open(f'tests/ref/{filename}', 'rb') as ref:
+            if os.environ.get('IS_DOCKER'):
+                filename = f'tests/ref/docker/{filename}'
+            else:
+                filename = f'tests/ref/{filename}'
+
+            with open(filename, 'rb') as ref:
                 assert(output.read() == ref.read())
+                
     if os.path.isfile(filename):
         os.remove(filename)
 
