@@ -5,6 +5,8 @@ from .workflow_node import WorkflowNode
 from .workflow_node import get_user_code_origine_workflow
 
 class TracableDataSetUtils:
+    ml_workflow_node = None
+    
     def plot_model(self, filename='temp_graph.png'):
         return plot_model(self.ml_workflow_node, filename)
 
@@ -34,8 +36,7 @@ def get_tracable_structure(klass):
         return pandas_class_to_wrapper[klass]
     return klass
 
-class TracableDataFrame(pd.DataFrame, TracableDataSetUtils):
-    ml_workflow_node = None
+class TracableDataFrame(pd.DataFrame, TracableDataSetUtils): pass
 
 pandas_class_to_wrapper[pd.DataFrame] = TracableDataFrame
 
