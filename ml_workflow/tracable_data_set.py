@@ -27,21 +27,18 @@ class TracableDataSetUtils:
         if self.ml_workflow_node is None:
             self.ml_workflow_node = get_user_code_origine_workflow()
 
-
 pandas_class_to_wrapper = {}
 
 def get_tracable_structure(klass):
-    if klass not in pandas_class_to_wrapper:
-        class TracableDataSetInstance(klass, TracableDataSetUtils):
-            def __init__(self, *args, **kwargs):
-                super().__init__(*args, **kwargs)
-                self.ml_workflow_node = None
+    if klass in pandas_class_to_wrapper:
+        return pandas_class_to_wrapper[klass]
+    return klass
 
-        pandas_class_to_wrapper[klass] = TracableDataSetInstance
+class TracableDataFrame(pd.DataFrame, TracableDataSetUtils):
+    ml_workflow_node = None
 
-    return pandas_class_to_wrapper[klass]
+pandas_class_to_wrapper[pd.DataFrame] = TracableDataFrame
 
-TracableDataFrame = get_tracable_structure(pd.DataFrame)
 
 class TracableList(list):
     def set_workflow_origin(self, workflow_tracable, parents = None):
