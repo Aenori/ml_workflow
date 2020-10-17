@@ -21,35 +21,30 @@ class DataFrameTracker:
     def handle_in_place(self, super_method, tr_df, *args, **kwargs):
         super_method(tr_df, *args, **kwargs)
         tr_df.set_default_ml_workflow_node_if_isnt_any()
-
-        current_rule = get_current_rule()
-
-        if tr_df.ml_workflow_node.origin != current_rule:
-            tr_df.ml_workflow_node = WorkflowNodeRule(
-                current_rule,
-                parents = tr_df.ml_workflow_node
-            )
+        self.set_result_df_node(tr_df, tr_df)
 
     def handle_with_return(self, super_method, tr_df, *args, **kwargs):
         result = super_method(tr_df, *args, **kwargs)
         result = get_tracable_structure(result.__class__)(result)
         tr_df.set_default_ml_workflow_node_if_isnt_any()
 
-        current_rule = get_current_rule()
-
-        if tr_df.ml_workflow_node.origin != current_rule:
-            result.ml_workflow_node = WorkflowNodeRule(
-                current_rule,
-                parents = tr_df.ml_workflow_node
-            )
-            assert(result.ml_workflow_node is not None)
-        else:
-            result.ml_workflow_node = tr_df.ml_workflow_node
-            assert(result.ml_workflow_node is not None)
+        self.set_result_df_node(tr_df, result)
 
         result.ml_workflow_node.outside_len = len(result)
         
         return result
+
+    def set_result_df_node(self, input_df, result_df):
+        current_rule = get_current_rule()
+
+        if input_df.ml_workflow_node.origin != current_rule:
+            result_df.ml_workflow_node = WorkflowNodeRule(
+                current_rule,
+                parents = input_df.ml_workflow_node
+            )
+        else:
+            # In case of inplace modification it does nothing, which is ok
+            result_df.ml_workflow_node = input_df.ml_workflow_node
 
     def add_notification_to(self, cls, method_name, hook_method):
         super_method = getattr(cls.__bases__[0], method_name)

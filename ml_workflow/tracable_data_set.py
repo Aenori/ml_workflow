@@ -5,8 +5,13 @@ from .workflow_node import WorkflowNode
 from .workflow_node import get_user_code_origine_workflow
 
 class TracableDataSetUtils:
+    # This act as a default value for all TracableDataFrame or other objects
+    # Just note that when you write
+    #   df.ml_workflow_node = something
+    # With df being an instance of TracableDataFrame, you are not modifying 
+    # this variable, but creating an instance level one that shadows it
     ml_workflow_node = None
-    
+
     def plot_model(self, filename='temp_graph.png'):
         return plot_model(self.ml_workflow_node, filename)
 
