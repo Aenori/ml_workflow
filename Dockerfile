@@ -14,5 +14,7 @@ ADD . /app
 
 ENV IS_DOCKER=1
 
-CMD pytest -vls
+ADD jupyter_notebook_config.json /root/.jupyter
+
+CMD jupyter notebook --ip=0.0.0.0 --port=8080 --allow-root 
 
