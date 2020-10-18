@@ -1,0 +1,1 @@
+docker run -it -p 8080:8080 covid19 jupyter notebook --ip=0.0.0.0 --port=8080 --allow-root
