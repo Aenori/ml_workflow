@@ -101,9 +101,9 @@ def create_nodes(layers, dot):
         dot.add_node(node)
 
 SHAPE_BY_CLASS_NAME = {
-    'Rule' : 'diamond',
-    'DataSource' : 'oval',
-    'default': 'rectangle'
+    'Rule' : 'rectangle',
+    'DataSource' : 'cylinder',
+    'default': 'ovale'
 }
 
 def get_shape(origin):
