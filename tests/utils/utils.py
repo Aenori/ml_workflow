@@ -8,11 +8,11 @@ def compare_or_generate_ref(filename):
                 ref.write(output.read())
         else:
             if os.environ.get('IS_DOCKER'):
-                filename = f'tests/ref/docker/{filename}'
+                ref_filename = f'tests/ref/docker/{filename}'
             else:
-                filename = f'tests/ref/{filename}'
+                ref_filename = f'tests/ref/{filename}'
 
-            with open(filename, 'rb') as ref:
+            with open(ref_filename, 'rb') as ref:
                 assert(output.read() == ref.read())
                 
     if os.path.isfile(filename):
