@@ -10,7 +10,7 @@ import ml_workflow
 import pandas as pd
 import numpy as np
 import os
-
+import json
 
 TEMP_DB_NAME = 'temp_for_test.db'
 
@@ -37,6 +37,8 @@ def clean_db(conn):
     conn.execute('DELETE FROM fake;')
     conn.commit()
 
+def as_json(data):
+    return json.loads(json.dumps(data))
 
 def test_frozen_session():
     conn = set_up_fake_db()
@@ -59,8 +61,8 @@ def test_frozen_session():
         res_1_recorded = get_simple_query_results(conn)
         res_5_recorded = get_simple_query_results(conn, 1)
 
-    assert(res_1 == res_1_recorded)
-    assert(res_5 == res_5_recorded)
+    assert(as_json(res_1) == res_1_recorded)
+    assert(as_json(res_5) == res_5_recorded)
 
     with Session.record_data_source('temp/test_session_record'):
         assert(get_simple_query_results(conn) == [])

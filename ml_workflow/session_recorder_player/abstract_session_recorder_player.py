@@ -1,10 +1,18 @@
 from ml_workflow.data_source import DataSource
 
+from collections import defaultdict
 
 class AbstractSessionRecorderPlayer:
+    master_json_filename = 'master.json'
+    file_tag = 'MLWF_File : '
+
     def __init__(self, path):
         self.active = False
         self.path = path
+
+        # Using dict would be more appropriate, but would prevent having unhashable types
+        self.args_recorded_list = defaultdict(list)
+        self.res_recorded_list = defaultdict(list)
 
     @staticmethod
     def unhooked_call(data_source, *args, **kwargs):
@@ -19,13 +27,12 @@ class AbstractSessionRecorderPlayer:
         for index in data_source.frozen_ignore_args_positions:
             if index < len(args):
                 del args[index]
-        args = tuple(args)
 
         for key in data_source.frozen_ignore_args:
             if key in kwargs:
                 del kwargs[key]
 
-        return args, kwargs
+        return (args, kwargs)
 
     def hook(self):
         DataSource.__original_call = DataSource.hookable_call
