@@ -1,6 +1,6 @@
 import python_path
 
-from ml_workflow.data_source import DataSource
+from ml_workflow import DataSource
 
 
 def test_frozen_arguments_removal():

@@ -80,10 +80,10 @@ class VizUtils:
     @staticmethod
     def correct_weird_pydot_bug(filename):
         with open(filename, 'r') as f:
-            # The \\1 means the same number of 3 as in the first group
             content = f.read()
         with open(filename, 'w') as f:
-            f.write(re.sub('scale\(1\.(3+) 1\.\\1\) ', '', content))
+            # The \\1 means the same number of 3 as in the first group
+            f.write(re.sub("scale\(1\.(3+) 1\.\\1\) ", '', content))
 
     def __init__(self, ts = None, expand_nested = True):
         self.ts = ts if ts else dt.datetime.now().strftime('%Y%m%d_%H%M%S')
