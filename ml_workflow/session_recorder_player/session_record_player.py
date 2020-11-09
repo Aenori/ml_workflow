@@ -36,7 +36,7 @@ class SessionRecordPlayer(AbstractSessionRecorderPlayer):
         if filename.endswith('.csv.gz') or filename.endswith('.csv'):
             return pd.read_csv(filename)
         elif filename.endswith('.h5'):
-            return pd.read_hdf(filename)
+            return pd.read_hdf(filename, key = 'ml-workflow-key')
         else:
             with open(filename, 'r') as f:
                 return json.load(f)
