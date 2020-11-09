@@ -2,6 +2,7 @@ from ml_workflow.data_source import DataSource
 
 import pickle
 import json
+import pandas as pd
 
 from .abstract_session_recorder_player import AbstractSessionRecorderPlayer
 
