@@ -1,9 +1,11 @@
 import setuptools
+from version import VERSION
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-from version import VERSION
+with open('requirements.txt', 'r') as f:
+    install_requires = f.readlines()
 
 setuptools.setup(
     name="ml_workflow", # Replace with your own username
@@ -20,4 +22,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    install_requires=install_requires,
 )
