@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 import os
 import json
+import datetime as dt
 
 TEMP_DB_NAME = 'temp_for_test.db'
 
@@ -70,3 +71,15 @@ def test_frozen_session():
     with Session.play_data_source_record('temp/test_session_record'):
         assert(get_simple_query_results(conn) == [])
 
+@DataSource(name='pd_returning_stuff')
+def data_source_with_pd():
+    return pd.DataFrame({'datetime' : [dt.datetime.now()]})
+
+def test_frozen_session_with_df():
+    with Session.record_data_source('temp/test_session_record_df'):
+        df = data_source_with_pd()
+
+    with Session.play_data_source_record('temp/test_session_record_df'):
+        df2 = data_source_with_pd()
+
+    assert(df.equals(df2))

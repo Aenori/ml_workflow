@@ -42,7 +42,7 @@ class SessionRecorder(AbstractSessionRecorderPlayer):
             # If res is a dataframe, saving it in a different file as csv
             if isinstance(res, pd.DataFrame):
                 filename = filename_without_extension + '.h5'
-                res.to_hdf(filename, key = 'ml-workflow-key')
+                res.to_hdf(filename, key = 'ml_workflow_key')
                 return self.file_with_tag(filename)
             else:
                 # res is a list or dict, saving it as json.
