@@ -32,7 +32,7 @@ class AbstractSessionRecorderPlayer:
             if key in kwargs:
                 del kwargs[key]
 
-        return (args, kwargs)
+        return (tuple(args), kwargs)
 
     def hook(self):
         DataSource.__original_call = DataSource.hookable_call

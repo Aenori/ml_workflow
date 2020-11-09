@@ -21,7 +21,7 @@ class SessionRecordPlayer(AbstractSessionRecorderPlayer):
             res_recorded_list_for_ds = self.res_recorded_list[ds]
 
             for arg, record in records:
-                args_recorded_list_for_ds.append(tuple(arg))
+                args_recorded_list_for_ds.append((tuple(arg[0]), arg[1]))
 
                 if isinstance(record, str) and record.startswith('MLWF_File : '):
                     res_recorded_list_for_ds.append(self.load_from_file_tag(record))
