@@ -41,13 +41,17 @@ class SessionRecorder(AbstractSessionRecorderPlayer):
 
             # If res is a dataframe, saving it in a different file as csv
             if isinstance(res, pd.DataFrame):
-                if res.size >= app_config.df_limit_to_compress:
-                    extension = '.csv.gz'
-                    res.to_csv(filename_without_extension + extension, compression='gzip')
-                else:
-                    extension = '.csv'
-                    res.to_csv(filename_without_extension + extension)
-                return self.file_with_tag(filename_without_extension + extension)
+                filename = filename_without_extension + '.pickle'
+                with open(filename, 'w') as f:
+                    pickle.dump(res, f)
+                    
+                # if res.size >= app_config.df_limit_to_compress:
+                #     extension = '.csv.gz'
+                #     res.to_csv(filename_without_extension + extension, compression='gzip')
+                # else:
+                #     extension = '.csv'
+                #     res.to_csv(filename_without_extension + extension)
+                return self.file_with_tag(filename)
             else:
                 # res is a list or dict, saving it as json.
                 filename = filename_without_extension + '.json'

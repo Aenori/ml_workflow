@@ -35,6 +35,9 @@ class SessionRecordPlayer(AbstractSessionRecorderPlayer):
 
         if filename.endswith('.csv.gz') or filename.endswith('.csv'):
             return pd.read_csv(filename)
+        elif filename.endswith('.pickle'):
+            with open(filename, 'r') as f:
+                return pickle.load(f)
         else:
             with open(filename, 'r') as f:
                 return json.load(f)
