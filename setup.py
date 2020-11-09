@@ -1,11 +1,19 @@
 import setuptools
 from version import VERSION
+import sys, os
+import shutil
+
+file_dir = os.path.dirname(__file__)
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 with open('requirements.txt', 'r') as f:
     install_requires = f.readlines()
+
+# Don't install tests on remote install
+if not '--with-test' in sys.argv:
+    shutil.rmtree(f'{file_dir}/tests')
 
 setuptools.setup(
     name="ml_workflow", # Replace with your own username
