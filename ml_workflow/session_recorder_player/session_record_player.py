@@ -47,6 +47,7 @@ class SessionRecordPlayer(AbstractSessionRecorderPlayer):
         if result_recorded is None:
             raise Exception(
                 f"For data source {data_source.name},"
+                f"Recorded list : {self.args_recorded_list[data_source.get_qual_name()]}"
                 f" could not find args {args_recorded}")
 
         return result_recorded
