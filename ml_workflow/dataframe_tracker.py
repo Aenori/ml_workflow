@@ -13,8 +13,13 @@ class DataFrameTracker:
 
     def handle_merge(self, super_method, tr_df, right, *args, **kwargs):
         res = self.handle_with_return(super_method, tr_df, right, *args, **kwargs)
-        right.set_default_ml_workflow_node_if_isnt_any()
-        res.ml_workflow_node.parents.append(right.ml_workflow_node)
+        if isinstance(right, TracableDataFrame):
+            right.set_default_ml_workflow_node_if_isnt_any()
+            right_ml_workflow_node = right.ml_workflow_node
+        else:
+            right_ml_workflow_node = WorkflowNode('Untracked DataFrame')
+
+        res.ml_workflow_node.parents.append(right_ml_workflow_node)
 
         return res
 
