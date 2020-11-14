@@ -1,8 +1,7 @@
 import python_path
 
-
 from utils.decorator import ReferenceUsingTest
-from tests.utils import compare_or_generate_ref
+from utils.test_utils import compare_or_generate_ref
 from ml_workflow.viz_utils import VizUtils, plot_model
 import utils
 from ml_workflow.workflow_node import WorkflowNode

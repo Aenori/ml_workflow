@@ -1,6 +1,5 @@
 import os
 
-
 def compare_or_generate_ref(filename):
     with open(filename, 'rb') as output:
         if os.environ.get('GENERATE_REF'):

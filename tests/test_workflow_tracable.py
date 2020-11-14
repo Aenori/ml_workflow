@@ -1,6 +1,6 @@
 import python_path
 
-import utils
+from utils.test_utils import CheckRaisedError
 from ml_workflow.workflow_node import WorkflowNode
 from ml_workflow.rule import Rule
 from ml_workflow.data_source import DataSource
@@ -16,7 +16,7 @@ def test_rule_authorized_keys():
     def f():
         pass
 
-    with utils.CheckRaisedError():
+    with CheckRaisedError():
         @ml_workflow.rule(name='fake', source='fake')
         def f():
             pass
@@ -28,7 +28,7 @@ def test_data_source_authorized_keys():
     def f():
         pass
 
-    with utils.CheckRaisedError():
+    with CheckRaisedError():
         @DataSource(name='fake', source='fake', fake='fake')
         def f():
             pass

@@ -5,6 +5,11 @@ import pydot
 import datetime as dt
 import re
 
+try:
+    from IPython.display import SVG, display
+except ImportError:
+    pass
+
 class VizUtils:
     rankdir = 'TB'
     dpi = 96
