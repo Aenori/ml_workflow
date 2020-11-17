@@ -2,14 +2,18 @@ import python_path
 
 from utils.decorator import ReferenceUsingTest
 from utils.test_utils import compare_or_generate_ref
-from ml_workflow.viz_utils import VizUtils, plot_model
+from ml_workflow.viz_utils import VizUtils, plot_model, \
+    plot_model_full_detail, get_default_dirname
 import utils
 from ml_workflow.workflow_node import WorkflowNode
 import ml_workflow
 from ml_workflow.rule import Rule
+
+import shutil
 import pandas as pd
 import numpy as np
 import os
+import datetime as dt
 
 
 def get_simple_graph_with_fork():
@@ -62,3 +66,15 @@ def test_correct_weird_pydot_bug():
     VizUtils.correct_weird_pydot_bug('temp/correct_weird_pydot_bug')
     with open('temp/correct_weird_pydot_bug', 'r') as f:
         assert(f.read() == 'transform="rotate(0) translate(4 256)"')    
+
+def test_plot_model_full_detail():
+    leaf_node = get_simple_graph_with_fork()
+    ts = dt.datetime(year=2020, month=1, day=1)
+    dirname = get_default_dirname(ts)
+    assert(not os.path.isdir(dirname))
+    
+    plot_model_full_detail(leaf_node, ts = ts)
+
+    assert(os.path.isdir(dirname))
+    shutil.rmtree(dirname)
+

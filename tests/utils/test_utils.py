@@ -16,14 +16,3 @@ def compare_or_generate_ref(filename):
                 
     if os.path.isfile(filename):
         os.remove(filename)
-
-
-class CheckRaisedError:
-    def __enter__(self):
-        pass
-
-    def __exit__(self, type, value, traceback):
-        # To cause failure on uncatched exception
-        assert(type is not None)
-        # To prevent failure on catched exception
-        return type is not None

@@ -5,10 +5,10 @@ import pydot
 import datetime as dt
 import re
 
-try:
-    from IPython.display import SVG, display
-except ImportError:
-    pass
+import IPython
+from IPython.display import SVG, display
+
+from . import viz_utils_node_detail_writer
 
 class VizUtils:
     rankdir = 'TB'
@@ -163,15 +163,33 @@ class VizUtils:
 
         if extension == 'svg':
             self.correct_weird_pydot_bug(to_file)
-
+            return IPython.display.display(SVG(to_file))
         # svg is useless here, but kept for clarity
         elif extension not in ('pdf', 'svg'):
             try:
-                from IPython import display
-                return display.Image(filename=to_file)
+                return IPython.display.Image(filename=to_file)
 
             except ImportError:
                 pass
 
+def get_default_dirname(ts):
+    return f"ml_workflow_graph_detail_{ts.strftime('%Y%m%d_%H%M%S')}"
+
+def plot_model_full_detail(model, directory = None, expand_nested=True, ts = None):
+    if ts is None:
+        ts = dt.datetime.now()
+    if directory is None:
+        directory =  os.path.join(os.getcwd(), get_default_dirname(ts))
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
+
+    to_file = os.path.join(directory, 'main_graph.svg')
+    viz_utils_node_detail_writer.write_detail_for_model(model, directory = directory)
+
+    return VizUtils(expand_nested=expand_nested, ts=ts).plot_model(model, to_file)
+
 def plot_model(model, to_file='model.png', expand_nested=True, ts=None):
+    """Plot_model is creating an image of the model, representing the differents
+ steps, datasource, and so on"""
+
     return VizUtils(expand_nested=expand_nested, ts=ts).plot_model(model, to_file)

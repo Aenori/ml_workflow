@@ -13,7 +13,7 @@ class WorkflowTracable:
             unauthorised_keys = set(kwargs.keys()) - self.get_authorized_attr()
             raise Exception(
                 f"Unauthorized keys for {self.__class__} :"
-                " {unauthorised_keys}")
+                f" {unauthorised_keys}")
 
         self.__dict__.update(kwargs)
 

@@ -1,5 +1,5 @@
 import pandas as pd
-from .viz_utils import plot_model
+from . import viz_utils
 
 from .workflow_node import WorkflowNode
 from .workflow_node import get_user_code_origine_workflow
@@ -13,7 +13,10 @@ class TracableDataSetUtils:
     ml_workflow_node = None
 
     def plot_model(self, filename='temp_graph.png'):
-        return plot_model(self.ml_workflow_node, filename)
+        return viz_utils.plot_model(self.ml_workflow_node, filename)
+
+    def plot_model_full_detail(self, directory=None):
+        return viz_utils.plot_model_full_detail(self, directory=None)
 
     def get_workflow_origin(self):
         if self.ml_workflow_node is None:
@@ -45,7 +48,6 @@ class TracableDataFrame(pd.DataFrame, TracableDataSetUtils): pass
 
 pandas_class_to_wrapper[pd.DataFrame] = TracableDataFrame
 
-
 class TracableList(list):
     def set_workflow_origin(self, workflow_tracable, parents = None):
         if parents is None:
@@ -54,7 +56,7 @@ class TracableList(list):
         self.ml_workflow_node = WorkflowNode(
             workflow_tracable,
             parents=parents
-        )    
+        )
 
     def __eq__(self, other):
         return super().__eq__(other)
@@ -64,4 +66,11 @@ def get_tracable_data_set(data_set):
         return TracableDataFrame(data_set)
     if isinstance(data_set, list):
         return TracableList(data_set)
-    raise Exception(f'Unknown source type {type(data_set)}')
+
+    msg = f"""ML_WORKFLOW : ERROR
+get_tracable_data_set has received an object of type {type(data_set)}
+The more probable cause is that you set @DataSource on a function that 
+returns something else that supported types : [pd.DataFrame, list]
+"""
+
+    raise Exception(msg)
