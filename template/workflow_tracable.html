@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>{{workflow_tracable_name}}</title>
+</head>
+<body>
+    <h1>Documentation pour {{workflow_tracable_name}}</h1>
+    {% for title, content in sections %}
+        <h2>{{title}}</h2>
+        <pre>{{ content | safe }}</pre>
+    {% endfor %}
+</body>
+</html>

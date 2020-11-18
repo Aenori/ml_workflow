@@ -24,7 +24,7 @@ def write_html_information(layer, directory):
     sections = []
     sections.append(('Function documentation', origin.__doc__))
 
-    code_source_for_html = origin.get_source().replace('\n', '<br>').replace(' ', '&nbsp;')
+    code_source_for_html = origin.get_source() #.replace('\n', '<br>').replace(' ', '&nbsp;')
     sections.append(('Function code', f"<code>{code_source_for_html}</code>"))
 
     with open(filename, 'w') as f:
