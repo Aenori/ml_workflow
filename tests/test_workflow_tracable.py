@@ -21,7 +21,6 @@ def test_rule_authorized_keys():
         def f():
             pass
 
-
 def test_data_source_authorized_keys():
     # Just testing it doesn't raise exception
     @DataSource(name='fake', source='fake')
@@ -34,3 +33,23 @@ def test_data_source_authorized_keys():
             pass
 
     assert('parameter_that_doesn_t_exist' in str(e.value))
+
+def test_check_name():
+    with pytest.raises(Exception):
+        @Rule(name="with space")
+        def f():
+            pass
+
+    @Rule(name="with_space")
+    def f():
+        pass    
+
+def test_doc_string_propagation():
+    def f():
+        """Docstring for f"""
+        pass
+
+    assert(f.__doc__ == "Docstring for f")
+
+    f = Rule(name="test")(f)
+    assert(f.__doc__ == "Docstring for f")

@@ -163,7 +163,7 @@ class VizUtils:
 
         if extension == 'svg':
             self.correct_weird_pydot_bug(to_file)
-            return IPython.display.display(SVG(to_file))
+            return SVG(to_file)
         # svg is useless here, but kept for clarity
         elif extension not in ('pdf', 'svg'):
             try:

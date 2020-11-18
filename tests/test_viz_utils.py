@@ -67,14 +67,3 @@ def test_correct_weird_pydot_bug():
     with open('temp/correct_weird_pydot_bug', 'r') as f:
         assert(f.read() == 'transform="rotate(0) translate(4 256)"')    
 
-def test_plot_model_full_detail():
-    leaf_node = get_simple_graph_with_fork()
-    ts = dt.datetime(year=2020, month=1, day=1)
-    dirname = get_default_dirname(ts)
-    assert(not os.path.isdir(dirname))
-    
-    plot_model_full_detail(leaf_node, ts = ts)
-
-    assert(os.path.isdir(dirname))
-    shutil.rmtree(dirname)
-

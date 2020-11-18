@@ -12,11 +12,18 @@ class TracableDataSetUtils:
     # this variable, but creating an instance level one that shadows it
     ml_workflow_node = None
 
-    def plot_model(self, filename='temp_graph.png'):
-        return viz_utils.plot_model(self.ml_workflow_node, filename)
+    def plot_model(self, filename='temp_graph.svg'):
+        return viz_utils.plot_model(
+            self.ml_workflow_node, 
+            filename
+        )
 
-    def plot_model_full_detail(self, directory=None):
-        return viz_utils.plot_model_full_detail(self, directory=None)
+    def plot_model_full_detail(self, directory=None, ts=None):
+        return viz_utils.plot_model_full_detail(
+            self.ml_workflow_node, 
+            directory=directory, 
+            ts=ts
+        )
 
     def get_workflow_origin(self):
         if self.ml_workflow_node is None:

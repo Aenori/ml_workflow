@@ -1,7 +1,7 @@
 from . import execution_context
 from .rule import Rule
 
-no_context_rule = Rule(name='Unspecified rule')
+no_context_rule = Rule(name='Unspecified_rule')
 not_a_rule_context = Rule(name='not_a_rule_context')
 
 
