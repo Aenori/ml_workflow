@@ -19,7 +19,9 @@ class WorkflowNode:
         self.origin = origin
         self.id = self.get_next_id()
         self.parents = parents if isinstance(parents, list) else [parents]
-        
+        self.logs = []
+        self.stats = {}
+
     def __str__(self):
         return str(self.origin)
 
@@ -51,6 +53,24 @@ class WorkflowNode:
             res.extend(parent.get_all_nodes())
         return res
 
+    def add_stat(self, key, value):
+        self.stats[key] = value
+
+    def add_log(self, log):
+        self.logs.append(log)
+
+    def add_logs(self, logs):
+        self.logs.extend(logs)
+
+    def formatted_stats(self):
+        formatted_k_v = []
+        for k, v in self.stats.items():
+            if isinstance(v, float):
+                formatted_k_v.append(f"{k} => {v:.3f}")
+            else:
+                formatted_k_v.append(f"{k} => {v}") 
+
+        return '\n'.join(formatted_k_v)
 
 class WorkflowNodeRule(WorkflowNode):
     def __init__(self, rule, parents=[]):

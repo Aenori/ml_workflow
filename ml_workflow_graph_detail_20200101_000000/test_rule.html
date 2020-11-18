@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>test_rule</title>
+</head>
+<body>
+    <h1>Documentation pour test_rule</h1>
+    
+        <h2>Function documentation</h2>
+        <pre>test_rule doc string</pre>
+    
+        <h2>Function code</h2>
+        <pre><code>@Rule(name = 'test_rule')
+def rule_test(df):
+    """test_rule doc string"""
+    df['C'] = df['A'] + df['B']
+    ExecutionContext.log("This is a log")
+    return df
+</code></pre>
+    
+        <h2>Stats</h2>
+        <pre>duration => 0.002</pre>
+    
+        <h2>Logs</h2>
+        <pre>This is a log</pre>
+    
+</body>
+</html>

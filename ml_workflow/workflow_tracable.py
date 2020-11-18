@@ -2,6 +2,7 @@ import inspect
 from . import execution_context
 import re
 import logging
+from .misc_utils import TimeIt
 logger = logging.getLogger(__name__)
 
 class WorkflowTracable:
@@ -25,7 +26,15 @@ class WorkflowTracable:
             self.call_as_decorator(*args, **kwargs)
             return self
 
-        return self.call(*args, **kwargs)
+        with TimeIt() as t:
+            res = self.call(*args, **kwargs)
+
+        if hasattr(res, 'ml_workflow_node'):
+            res.ml_workflow_node.add_stat('duration', t.duration())
+
+            res.ml_workflow_node.add_logs(execution_context.ExecutionContext.flush_logs())
+
+        return res
 
     def call(self, *args, **kwargs):
         with self:

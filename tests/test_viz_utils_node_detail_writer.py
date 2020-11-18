@@ -9,6 +9,8 @@ from ml_workflow.workflow_node import WorkflowNode
 import ml_workflow
 from ml_workflow import DataSource, Rule
 
+from ml_workflow.execution_context import ExecutionContext
+
 import shutil
 import pandas as pd
 import numpy as np
@@ -24,6 +26,7 @@ def data_source_test():
 def rule_test(df):
     """test_rule doc string"""
     df['C'] = df['A'] + df['B']
+    ExecutionContext.log("This is a log")
     return df
 
 def get_df():
@@ -44,5 +47,10 @@ def test_plot_model_full_detail():
     df.plot_model_full_detail(ts = ts)
 
     assert(os.path.isdir(dirname))
-    # shutil.rmtree(dirname)
+
+    with open(os.path.join(dirname, 'test_rule.html'), 'r') as f:
+        content = f.read()
+
+    assert("test_rule doc string" in content)
+    assert("This is a log" in content)
 
