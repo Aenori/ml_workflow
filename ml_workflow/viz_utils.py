@@ -172,8 +172,10 @@ class VizUtils:
             except ImportError:
                 pass
 
+DEFAULT_DIR_NAME_PREFIX = 'ml_workflow_graph_detail'
+
 def get_default_dirname(ts):
-    return f"ml_workflow_graph_detail_{ts.strftime('%Y%m%d_%H%M%S')}"
+    return f"{DEFAULT_DIR_NAME_PREFIX}_{ts.strftime('%Y%m%d_%H%M%S')}"
 
 def plot_model_full_detail(model, directory = None, expand_nested=True, ts = None):
     if ts is None:
