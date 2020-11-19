@@ -24,8 +24,7 @@ def write_html_information(layer, directory):
     sections = []
     sections.append(('Function documentation', origin.__doc__))
 
-    code_source_for_html = origin.get_source()
-    sections.append(('Function code', f"<code>{code_source_for_html}</code>"))
+    sections.append(('Rule full details', origin.get_full_details()))
 
     if len(layer.stats):
         sections.append(('Stats', layer.formatted_stats()))
@@ -33,6 +32,7 @@ def write_html_information(layer, directory):
     if len(layer.logs):
         sections.append(('Logs', '\n'.join(layer.logs)))
 
+    sections.append(('Function code', f"<code>{origin.get_source()}</code>"))
 
     with open(filename, 'w') as f:
         rendered_template = get_template().render(

@@ -14,13 +14,11 @@
     </div>
     
     <div>
-        <h3>Function code</h3>
+        <h3>Rule full details</h3>
         <div>
-            <pre><code>@DataSource(name = 'test_data_source')
-def data_source_test():
-    """test_data_source doc string"""
-    return pd.DataFrame({'A' : [1, 2], 'B' : [3, 4]})
-</code></pre>
+            <pre>Rule :
+  name => test_data_source
+  origin : /tests/test_viz_utils_node_detail_writer.py:20</pre>
         </div>
     </div>
     
@@ -28,6 +26,17 @@ def data_source_test():
         <h3>Stats</h3>
         <div>
             <pre>duration => 0.001</pre>
+        </div>
+    </div>
+    
+    <div>
+        <h3>Function code</h3>
+        <div>
+            <pre><code>@DataSource(name = 'test_data_source')
+def data_source_test():
+    """test_data_source doc string"""
+    return pd.DataFrame({'A' : [1, 2], 'B' : [3, 4]})
+</code></pre>
         </div>
     </div>
     

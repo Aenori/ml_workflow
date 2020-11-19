@@ -68,9 +68,21 @@ class WorkflowTracable(Decorator):
             return None
         return self.version
 
-    def get_authorized_attr(self):
-        return self.__class__.AUTHORISED_ATTR
+    @classmethod
+    def get_authorized_attr(cls):
+        return cls.AUTHORISED_ATTR
+
+    def get_full_details(self):
+        msg = f"Rule :\n"
+        for k in self.get_authorized_attr():
+            if hasattr(self, k):
+                msg += f"  {k} => {getattr(self, k)}\n"
+        msg += f"  origin : {self.get_definition_location()}"
+        
+        return msg
 
     def __check_name(self):
         if not WorkflowTracable.VALID_NAME_RE.match(self.name):
             raise Exception(f"Invalid name found : {self.name}. Only allowed characters are : a-zA-Z0-9_\-\.")
+
+

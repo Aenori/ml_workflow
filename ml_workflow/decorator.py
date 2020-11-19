@@ -1,5 +1,6 @@
 import logging
 logger = logging.getLogger(__name__)
+import os
 
 class Decorator:
     def __init__(self):
@@ -24,5 +25,9 @@ class Decorator:
 
     def get_definition_location(self):
         f = self.source_function
-        return f"{f.__globals__['__file__']}:{f.__code__.co_firstlineno}"
+        res = f"{f.__globals__['__file__']}:{f.__code__.co_firstlineno}"
+        if res.startswith(os.getcwd()):
+            res = res.replace(os.getcwd(), '')
+
+        return res
         
