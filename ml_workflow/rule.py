@@ -10,7 +10,7 @@ class Rule(WorkflowTracable):
         Rule.rule_by_name[self.name].append(self)
 
     @classmethod
-    def call_from_reference_name(cls, reference_name):
+    def get_from_reference_name(cls, reference_name):
         if reference_name not in cls.reference_name_to_rule:
             v = lambda rule : rule.__dict__.get('version', '')
             best_rule = None
@@ -29,3 +29,10 @@ class Rule(WorkflowTracable):
     def set_for_reference_name(cls, reference_name, rule):
         cls.reference_name_to_rule[reference_name] = rule
 
+class RulePlaceHolder:
+    def __init__(self, name):
+        self.name = name
+        self.source_function = None
+
+    def __call__(self, *args, **kwargs):
+        return Rule.get_from_reference_name(self.name)(*args, **kwargs)

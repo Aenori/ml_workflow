@@ -3,15 +3,15 @@ from . import execution_context
 import re
 import logging
 from .misc_utils import TimeIt
+from .decorator import Decorator
 logger = logging.getLogger(__name__)
 
-class WorkflowTracable:
-    AUTHORISED_ATTR = set(['name', 'highlight'])
+class WorkflowTracable(Decorator):
+    AUTHORISED_ATTR = set(['name', 'highlight', 'version', 'author', 'tags'])
     VALID_NAME_RE = re.compile("^[a-zA-Z0-9_\-\.]+$")
 
     def __init__(self, **kwargs):
-        self.source_function = None
-
+        super().__init__()
         if not (set(kwargs.keys()) <= self.get_authorized_attr()):
             unauthorised_keys = set(kwargs.keys()) - self.get_authorized_attr()
             raise Exception(
@@ -21,17 +21,14 @@ class WorkflowTracable:
         self.__dict__.update(kwargs)
         self.__check_name()
 
-    def __call__(self, *args, **kwargs):
-        if self.source_function is None:
-            self.call_as_decorator(*args, **kwargs)
-            return self
-
+    # This method is called by Decorator.__call__, after the first call,
+    # as a decorator
+    def call_as_decorated(self, *args, **kwargs):
         with TimeIt() as t:
             res = self.call(*args, **kwargs)
 
         if hasattr(res, 'ml_workflow_node'):
             res.ml_workflow_node.add_stat('duration', t.duration())
-
             res.ml_workflow_node.add_logs(execution_context.ExecutionContext.flush_logs())
 
         return res
@@ -50,13 +47,6 @@ class WorkflowTracable:
 
     def __exit__(self, type, value, traceback):
         execution_context.notify_exit(self)
-
-    def call_as_decorator(self, *args, **kwargs):
-        if ((len(args) != 1) or (len(kwargs) != 0)):
-            logger.warning('First call of a Rule / DataSource should be as a decorator')    
-        
-        self.source_function = args[0]
-        self.__doc__ = self.source_function.__doc__
 
     def get_source(self):
         if self.source_function is None:
