@@ -16,7 +16,8 @@ class RuleConfigManager:
 
     @classmethod
     def add_branch(cls, branch):
-        cls.non_default_allowed_branch.insert(0, branch)
+        cls.allowed_branches.insert(0, branch)
+        cls.cache_reference_name_to_rule = {}
 
     @classmethod
     def clean_reference_for(cls, name):
