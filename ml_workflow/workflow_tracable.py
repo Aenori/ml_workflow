@@ -10,7 +10,7 @@ from packaging import version
 logger = logging.getLogger(__name__)
 
 class WorkflowTracable(Decorator):
-    AUTHORISED_ATTR = set(['name', 'highlight', 'version', 'branch', 'tags'])
+    AUTHORISED_ATTR = set(['name', 'highlight', 'version', 'branch', 'tags', 'author', 'created_at'])
     VALID_NAME_RE = re.compile("^[a-zA-Z0-9_\-\.]+$")
 
     def __init__(self, **kwargs):
@@ -78,7 +78,7 @@ class WorkflowTracable(Decorator):
             if hasattr(self, k):
                 msg += f"  {k} => {getattr(self, k)}\n"
         msg += f"  origin : {self.get_definition_location()}"
-        
+
         return msg
 
     def __check_name(self):
