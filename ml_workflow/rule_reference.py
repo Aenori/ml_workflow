@@ -1,5 +1,6 @@
 from .decorator import Decorator
 from . import rule
+from . import rule_config_manager
 
 class RuleReference(Decorator):
     dict_by_name = {}
@@ -7,6 +8,7 @@ class RuleReference(Decorator):
     def __init__(self, name):
         self.name = name
         RuleReference.dict_by_name[self.name] = self
+        rule_config_manager.RuleConfigManager.clean_reference_for(name)
         super().__init__()
 
     # Override Decorator.call_as_decorator
