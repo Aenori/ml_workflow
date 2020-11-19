@@ -10,9 +10,13 @@ class RuleConfigManager:
 
     @classmethod
     def reset_config(cls):
-        cls.use_default_branch = True
-        cls.non_default_allowed_branch = set()
+        # None is for default branch
+        cls.allowed_branches = [None]
         cls.specific_rules = dict()
+
+    @classmethod
+    def add_branch(cls, branch):
+        cls.non_default_allowed_branch.insert(0, branch)
 
     @classmethod
     def clean_reference_for(cls, name):
@@ -27,18 +31,51 @@ class RuleConfigManager:
         return cls.cache_reference_name_to_rule[name]
 
     @classmethod
-    def set_for_reference_name(cls, name, rule):
-        cls.cache_reference_name_to_rule[name] = rule
+    def set_for_reference_name(cls, name, rule_):
+        cls.cache_reference_name_to_rule[name] = rule_
+
+    @classmethod
+    def config_to_str(cls):
+        msg = f"  allowed branches => {cls.allowed_branches}\n"
+        msg += f"  specific rules => {cls.specific_rules}"
+
+        return msg
+
+    @classmethod
+    def is_first_rule_priority_to_second(cls, first_rule, second_rule):
+        first_branch_index = cls.allowed_branches.index(first_rule.get_branch())
+        second_branch_index = cls.allowed_branches.index(second_rule.get_branch())
+
+        if first_branch_index != second_branch_index:
+            # branch are classed by decreasing priority
+            return first_branch_index < second_branch_index
+        elif first_rule.get_version() is None:
+            return False
+        elif second_rule.get_version() is None:
+            return True
+        else:
+            return first_rule.get_version() > second_rule.get_version()
+
+    @classmethod
+    def is_possible(cls, rule_):
+        return rule_.get_branch() in cls.allowed_branches
 
     @classmethod
     def select_rule(cls, name):
-        v = lambda r : r.__dict__.get('version', '')
         best_rule = None
 
         for irule in rule.Rule.rule_by_name[name]:
-            if not hasattr(irule, 'branch'):
-                if (best_rule is None) or (v(irule) > v(best_rule)):
+            if cls.is_possible(irule):
+                if best_rule is None:
                     best_rule = irule
+                elif cls.is_first_rule_priority_to_second(irule, best_rule):
+                    best_rule = irule
+
+        if best_rule is None:
+            msg = f"ERROR : no rule found for {name}, please check the config"
+            msg += cls.config_to_str()
+
+            raise Exception(msg)
 
         return best_rule
 

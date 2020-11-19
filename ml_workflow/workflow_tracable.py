@@ -58,6 +58,16 @@ class WorkflowTracable(Decorator):
             return ''
         return inspect.getsource(self.source_function)
 
+    def get_branch(self):
+        if not hasattr(self, 'branch'):
+            return None
+        return self.branch
+    
+    def get_version(self):
+        if not hasattr(self, 'version'):
+            return None
+        return self.version
+
     def get_authorized_attr(self):
         return self.__class__.AUTHORISED_ATTR
 
