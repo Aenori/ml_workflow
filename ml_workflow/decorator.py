@@ -1,3 +1,5 @@
+import logging
+logger = logging.getLogger(__name__)
 
 class Decorator:
     def __init__(self):
@@ -16,4 +18,11 @@ class Decorator:
         
         self.source_function = args[0]
         self.__doc__ = self.source_function.__doc__
+
+    def get_source_function_args(self):
+        return self.source_function.__code__.co_varnames
+
+    def get_definition_location(self):
+        f = self.source_function
+        return f"{f.__globals__['__file__']}:{f.__code__.co_firstlineno}"
         

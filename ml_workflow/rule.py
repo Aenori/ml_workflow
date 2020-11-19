@@ -1,5 +1,6 @@
 from .workflow_tracable import WorkflowTracable
 import collections
+from . import rule_reference
 
 class Rule(WorkflowTracable):
     rule_by_name = collections.defaultdict(list)
@@ -8,6 +9,14 @@ class Rule(WorkflowTracable):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Rule.rule_by_name[self.name].append(self)
+
+    # Override Decorator.call_as_decorator
+    def call_as_decorator(self, *args, **kwargs):
+        super().call_as_decorator(*args, **kwargs)
+
+        this_rule_reference = rule_reference.RuleReference.dict_by_name.get(self.name)
+        if this_rule_reference:
+            this_rule_reference.check_coherence(self)
 
     @classmethod
     def get_from_reference_name(cls, reference_name):
@@ -28,11 +37,3 @@ class Rule(WorkflowTracable):
     @classmethod
     def set_for_reference_name(cls, reference_name, rule):
         cls.reference_name_to_rule[reference_name] = rule
-
-class RulePlaceHolder:
-    def __init__(self, name):
-        self.name = name
-        self.source_function = None
-
-    def __call__(self, *args, **kwargs):
-        return Rule.get_from_reference_name(self.name)(*args, **kwargs)
