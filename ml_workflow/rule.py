@@ -23,10 +23,9 @@ class Rule(WorkflowTracable):
         if reference_name not in cls.reference_name_to_rule:
             v = lambda rule : rule.__dict__.get('version', '')
             best_rule = None
-            best_rule_version = None
 
             for rule in cls.rule_by_name[reference_name]:
-                if not hasattr(rule, 'author'):
+                if not hasattr(rule, 'branch'):
                     if (best_rule is None) or (v(rule) > v(best_rule)):
                         best_rule = rule
             

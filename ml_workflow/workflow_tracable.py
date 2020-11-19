@@ -4,10 +4,13 @@ import re
 import logging
 from .misc_utils import TimeIt
 from .decorator import Decorator
+
+from packaging import version
+
 logger = logging.getLogger(__name__)
 
 class WorkflowTracable(Decorator):
-    AUTHORISED_ATTR = set(['name', 'highlight', 'version', 'author', 'tags'])
+    AUTHORISED_ATTR = set(['name', 'highlight', 'version', 'branch', 'tags'])
     VALID_NAME_RE = re.compile("^[a-zA-Z0-9_\-\.]+$")
 
     def __init__(self, **kwargs):
@@ -19,6 +22,8 @@ class WorkflowTracable(Decorator):
                 f" {unauthorised_keys}")
 
         self.__dict__.update(kwargs)
+        if 'version' in kwargs:
+            self.version = version.parse(kwargs['version'])
         self.__check_name()
 
     # This method is called by Decorator.__call__, after the first call,
