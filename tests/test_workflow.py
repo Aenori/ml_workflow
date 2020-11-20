@@ -13,19 +13,19 @@ def get_simple_fork_network():
     root1 = WorkflowNode('DataSource1')
     root2 = WorkflowNode('DataSource2')
 
-    child1 = WorkflowNode('Processing_on_DS2', parents=root2)
-    merge_child2 = WorkflowNode('Merge_sources', parents=[root1, child1])
-    child3 = WorkflowNode('LeafNode', parents=merge_child2)
+    child1 = WorkflowNode('Processing_on_DS2', previous=root2)
+    merge_child2 = WorkflowNode('Merge_sources', previous=[root1, child1])
+    child3 = WorkflowNode('LeafNode', previous=merge_child2)
 
     return root1, root2, child1, merge_child2, child3
 
 
 def test_constructor_polymorphism():
     root = WorkflowNode(None)
-    child = WorkflowNode(None, parents=root)
-    assert(child.parents == [root])
-    child = WorkflowNode(None, parents=[root])
-    assert(child.parents == [root])
+    child = WorkflowNode(None, previous=root)
+    assert(child.previous == [root])
+    child = WorkflowNode(None, previous=[root])
+    assert(child.previous == [root])
 
 
 def test_graph_size():

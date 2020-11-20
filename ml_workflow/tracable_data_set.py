@@ -31,13 +31,13 @@ class TracableDataSetUtils:
 
         return self.ml_workflow_node.origin
 
-    def set_workflow_origin(self, workflow_tracable, parents = None):
-        if parents is None:
-            parents = []
+    def set_workflow_origin(self, workflow_tracable, previous = None):
+        if previous is None:
+            previous = []
 
         self.ml_workflow_node = WorkflowNode(
             workflow_tracable,
-            parents=parents
+            previous=previous
         )
 
     def set_default_ml_workflow_node_if_isnt_any(self):
@@ -56,13 +56,13 @@ class TracableDataFrame(pd.DataFrame, TracableDataSetUtils): pass
 pandas_class_to_wrapper[pd.DataFrame] = TracableDataFrame
 
 class TracableList(list):
-    def set_workflow_origin(self, workflow_tracable, parents = None):
-        if parents is None:
-            parents = []
+    def set_workflow_origin(self, workflow_tracable, previous = None):
+        if previous is None:
+            previous = []
 
         self.ml_workflow_node = WorkflowNode(
             workflow_tracable,
-            parents=parents
+            previous=previous
         )
 
     def __eq__(self, other):

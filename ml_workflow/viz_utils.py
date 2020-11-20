@@ -108,7 +108,7 @@ class VizUtils:
         for layer in layers:
             layer_id = layer.get_str_id()
 
-            for inbound_node in layer.parents:
+            for inbound_node in layer.previous:
                 inbound_layer_id = inbound_node.get_str_id()
                 assert dot.get_node(inbound_layer_id)
                 assert dot.get_node(layer_id)

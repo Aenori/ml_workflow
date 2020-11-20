@@ -19,7 +19,7 @@ class DataFrameTracker:
         else:
             right_ml_workflow_node = WorkflowNode('Untracked DataFrame')
 
-        res.ml_workflow_node.parents.append(right_ml_workflow_node)
+        res.ml_workflow_node.previous.append(right_ml_workflow_node)
 
         return res
 
@@ -45,7 +45,7 @@ class DataFrameTracker:
         if input_df.ml_workflow_node.origin != current_rule:
             result_df.ml_workflow_node = WorkflowNodeRule(
                 current_rule,
-                parents = input_df.ml_workflow_node
+                previous = input_df.ml_workflow_node
             )
         else:
             # In case of inplace modification it does nothing, which is ok

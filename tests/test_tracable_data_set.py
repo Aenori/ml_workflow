@@ -57,7 +57,7 @@ def test_merge():
 
     df3 = df1.merge(df2)
     assert(isinstance(df3, TracableDataFrame))
-    assert(len(df3.ml_workflow_node.parents) == 2)
+    assert(len(df3.ml_workflow_node.previous) == 2)
     assert(df3.ml_workflow_node.get_graph_size() == 3)
 
 def test_merge_with_df():
@@ -66,7 +66,7 @@ def test_merge_with_df():
 
     df3 = df1.merge(df2, on='Id')
     assert(isinstance(df3, TracableDataFrame))
-    assert(len(df3.ml_workflow_node.parents) == 2)
+    assert(len(df3.ml_workflow_node.previous) == 2)
     assert(df3.ml_workflow_node.get_graph_size() == 3)
 
 def test_tracable_data_set_init():
