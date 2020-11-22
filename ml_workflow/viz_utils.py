@@ -9,6 +9,7 @@ import IPython
 from IPython.display import SVG, display
 
 from . import viz_utils_node_detail_writer
+from . import viz_utils_layer
 
 class VizUtils:
     rankdir = 'TB'
@@ -98,7 +99,7 @@ class VizUtils:
         self.raise_error_if_no_pydot()
 
         dot = self.get_dot_graph(subgraph, model)
-        layers = model.get_all_nodes()
+        layers = viz_utils_layer.convert_node_to_layer(model)
         self.create_nodes(layers, dot)
         self.add_edges_in_dot(layers, dot)
 

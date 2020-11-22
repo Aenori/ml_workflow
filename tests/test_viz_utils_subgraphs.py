@@ -15,26 +15,31 @@ import numpy as np
 import os
 import datetime as dt
    
-def test_sub_graph():
+@Rule(name='viz_util_test_rule_1')
+def viz_util_test_rule_1(df):
+    df['A'] += 1
+
+    return df
+
+@Rule(name='viz_util_test_rule_2')
+def viz_util_test_rule_2(df):
+    df['B'] += 1
+
+    return df
+
+def test_sub_graph_1():
     @DataSource(name='viz_util_data_source')
     def data_source():
         return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
 
-    @Rule(name='viz_util_test_rule_1')
-    def viz_util_test_rule_1(df):
-        df['A'] += 1
-
-        return df
-
-    @Rule(name='viz_util_test_rule_2')
-    def viz_util_test_rule_2(df):
-        df['B'] += 2
+    @Rule(name='viz_util_test_rule_3')
+    def viz_util_test_rule_3(df):
+        df['A'] *= 2
         df = viz_util_test_rule_1(df)
         df['A'] *= 2
-
         return df
 
-    df = viz_util_test_rule_2(data_source())
+    df = viz_util_test_rule_3(data_source())
 
     assert(len(df.ml_workflow_node.get_all_nodes()))
 
@@ -42,5 +47,25 @@ def test_sub_graph():
     assert(len(df.ml_workflow_node.get_all_nodes()[1].origin) == 1)
     assert(len(df.ml_workflow_node.get_all_nodes()[2].origin) == 1)
 
-    df.plot_model('test_with_subgraph.png')
+    df.plot_model('test_with_subgraph_1.png')
 
+def test_sub_graph_1():
+    @DataSource(name='viz_util_data_source')
+    def data_source():
+        return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
+
+    @Rule(name='viz_util_test_rule_4')
+    def viz_util_test_rule_4(df):
+        df = viz_util_test_rule_1(df)
+        df = viz_util_test_rule_2(df)
+        return df
+
+    df = viz_util_test_rule_4(data_source())
+
+    assert(len(df.ml_workflow_node.get_all_nodes()))
+
+    assert(len(df.ml_workflow_node.get_all_nodes()[0].origin) == 2)
+    assert(len(df.ml_workflow_node.get_all_nodes()[1].origin) == 2)
+    assert(len(df.ml_workflow_node.get_all_nodes()[2].origin) == 1)
+
+    df.plot_model('test_with_subgraph_2.png')
