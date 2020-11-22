@@ -22,18 +22,19 @@ def test_tracable_data_set():
     df['Age'] += 1
     set_is_old_from_age(df)
     df['IsYoung'] = df['Age'] < 20
+    assert(df.ml_workflow_node.get_graph_size() == 4)
     df['DansLaQuarantaine'] = np.logical_and(df['Age'] >= 40, df['Age'] < 50)
 
     assert(set(df.columns) == set(
         ['Age', 'IsYoung', 'IsOld', 'DansLaQuarantaine']))
     assert(df.ml_workflow_node.get_graph_size() == 4)
 
-    assert(df.ml_workflow_node.origin is no_context_rule)
+    assert(df.ml_workflow_node.get_leaf_origin() is no_context_rule)
     assert(df.ml_workflow_node.modified_keys ==
            set(['IsYoung', 'DansLaQuarantaine']))
 
     node = df.ml_workflow_node.get_previous_node()
-    assert(node.origin is set_is_old_from_age)
+    assert(node.get_leaf_origin() is set_is_old_from_age)
     assert(node.modified_keys == set(['IsOld']))
 
     node = node.get_previous_node()

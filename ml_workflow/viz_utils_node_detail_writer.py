@@ -18,7 +18,7 @@ def write_detail_for_model(model, directory):
         write_html_information(layer, directory)
 
 def write_html_information(layer, directory):
-    origin = layer.origin 
+    origin = layer.get_leaf_origin() 
     filename = os.path.join(directory, f"{origin}.html")
 
     sections = []

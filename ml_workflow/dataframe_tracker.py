@@ -1,7 +1,7 @@
 from .workflow_node import get_user_code_origine_workflow
 from .workflow_node import WorkflowNode, WorkflowNodeRule
 from .tracable_data_set import TracableDataFrame, get_tracable_structure
-from .context_utils import get_current_rule
+from .context_utils import get_current_context
 
 from .function_utils import prevent_exception
 
@@ -17,7 +17,7 @@ class DataFrameTracker:
             right.set_default_ml_workflow_node_if_isnt_any()
             right_ml_workflow_node = right.ml_workflow_node
         else:
-            right_ml_workflow_node = WorkflowNode('Untracked DataFrame')
+            right_ml_workflow_node = WorkflowNode(['Untracked DataFrame'])
 
         res.ml_workflow_node.previous.append(right_ml_workflow_node)
 
@@ -40,11 +40,11 @@ class DataFrameTracker:
         return result
 
     def set_result_df_node(self, input_df, result_df):
-        current_rule = get_current_rule()
+        current_context = get_current_context()
 
-        if input_df.ml_workflow_node.origin != current_rule:
+        if not input_df.ml_workflow_node.match_origin(current_context):
             result_df.ml_workflow_node = WorkflowNodeRule(
-                current_rule,
+                current_context,
                 previous = input_df.ml_workflow_node
             )
         else:

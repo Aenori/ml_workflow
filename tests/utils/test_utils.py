@@ -14,5 +14,5 @@ def compare_or_generate_ref(filename):
             with open(ref_filename, 'rb') as ref:
                 assert(output.read() == ref.read())
                 
-    if os.path.isfile(filename):
+    if os.path.isfile(filename) and not os.environ.get('KEEP_FILE'):
         os.remove(filename)

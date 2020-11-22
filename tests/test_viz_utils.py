@@ -17,12 +17,12 @@ import datetime as dt
 
 
 def get_simple_graph_with_fork():
-    root1 = WorkflowNode(Rule(name='DataSource1'))
-    root2 = WorkflowNode(Rule(name='DataSource2'))
+    root1 = WorkflowNode([Rule(name='DataSource1')])
+    root2 = WorkflowNode([Rule(name='DataSource2')])
 
-    child1 = WorkflowNode(Rule(name='Processing_on_DS2'), previous=root2)
-    merge_child2 = WorkflowNode(Rule(name='Merge_sources'), previous=[root1, child1])
-    leaf_node = WorkflowNode(Rule(name='LeafNode'), previous=merge_child2)
+    child1 = WorkflowNode([Rule(name='Processing_on_DS2')], previous=root2)
+    merge_child2 = WorkflowNode([Rule(name='Merge_sources')], previous=[root1, child1])
+    leaf_node = WorkflowNode([Rule(name='LeafNode')], previous=merge_child2)
 
     return leaf_node
 
@@ -65,27 +65,4 @@ def test_correct_weird_pydot_bug():
         f.write('transform="scale(1.3333 1.3333) rotate(0) translate(4 256)"')
     VizUtils.correct_weird_pydot_bug('temp/correct_weird_pydot_bug')
     with open('temp/correct_weird_pydot_bug', 'r') as f:
-        assert(f.read() == 'transform="rotate(0) translate(4 256)"')    
-
-def test_sub_graph():
-    @DataSource(name='viz_util_data_source')
-    def data_source():
-        return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
-
-    @Rule(name='viz_util_test_rule_1')
-    def viz_util_test_rule_1(df):
-        df['A'] += 1
-
-        return df
-
-    @Rule(name='viz_util_test_rule_2')
-    def viz_util_test_rule_2(df):
-        df['B'] += 2
-        df = viz_util_test_rule_1(df)
-        df['A'] *= 2
-
-        return df
-
-    df = viz_util_test_rule_2(data_source())
-    df.plot_model('test_with_subgraph.png')
-
+        assert(f.read() == 'transform="rotate(0) translate(4 256)"')

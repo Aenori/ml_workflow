@@ -11,7 +11,7 @@ class DataSource(WorkflowTracable):
         result = self.hookable_call(*args, **kwargs)
 
         result = get_tracable_data_set(result)
-        result.set_workflow_origin(self)
+        result.set_workflow_origin([self])
         result.ml_workflow_node.outside_len = len(result)
 
         return result

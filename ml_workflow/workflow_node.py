@@ -16,14 +16,16 @@ class WorkflowNode:
         return cls._next_id
 
     def __init__(self, origin, previous=[]):
-        self.origin = origin
+        # origin should be a list of applied WorfflowTracable (Rule and DataSource)
+        assert(isinstance(origin, (tuple, list)))
+        self.origin = tuple(origin)
         self.id = self.get_next_id()
         self.previous = previous if isinstance(previous, list) else [previous]
         self.logs = []
         self.stats = {}
 
     def __str__(self):
-        return str(self.origin)
+        return str(self.get_leaf_origin())
 
     def get_str_id(self):
         return f'Workflow_node_{self.id}'
@@ -72,6 +74,13 @@ class WorkflowNode:
 
         return '\n'.join(formatted_k_v)
 
+    def match_origin(self, context):
+        return self.origin[:len(context)] == context
+
+    def get_leaf_origin(self):
+        return self.origin[-1]
+
+
 class WorkflowNodeRule(WorkflowNode):
     def __init__(self, rule, previous=[]):
         super().__init__(rule, previous)
@@ -91,4 +100,4 @@ class SpecialOrigin(Enum):
 
 
 def get_user_code_origine_workflow():
-    return WorkflowNode(SpecialOrigin.USER_CODE)
+    return WorkflowNode([SpecialOrigin.USER_CODE])

@@ -4,6 +4,10 @@ from . import rule_reference
 from . import rule_config_manager
 
 class Rule(WorkflowTracable):
+    AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(
+        set(['context_log'])
+    )
+
     rule_by_name = collections.defaultdict(list)
 
     def __init__(self, **kwargs):
@@ -15,6 +19,8 @@ class Rule(WorkflowTracable):
     def call_as_decorator(self, *args, **kwargs):
         super().call_as_decorator(*args, **kwargs)
 
+        # On first call, check that if there is a RuleReference, the Rule has the same
+        # arguments
         this_rule_reference = rule_reference.RuleReference.dict_by_name.get(self.name)
         if this_rule_reference:
             this_rule_reference.check_coherence(self)
