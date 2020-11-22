@@ -80,6 +80,9 @@ class WorkflowNode:
     def get_leaf_origin(self):
         return self.origin[-1]
 
+    def get_root_origin(self):
+        return self.origin[0]
+
 
 class WorkflowNodeRule(WorkflowNode):
     def __init__(self, rule, previous=[]):

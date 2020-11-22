@@ -99,9 +99,10 @@ class VizUtils:
         self.raise_error_if_no_pydot()
 
         dot = self.get_dot_graph(subgraph, model)
-        layers = viz_utils_layer.convert_node_to_layer(model)
+        layers = viz_utils_layer.convert_node_to_layer(model).get_all_root_layers()
+        nodes = model.get_all_nodes()
         self.create_nodes(layers, dot)
-        self.add_edges_in_dot(layers, dot)
+        self.add_edges_in_dot(nodes, dot)
 
         return dot
 
@@ -132,10 +133,10 @@ class VizUtils:
 
     def create_nodes(self, layers, dot):
         for layer in layers:
-            origin = layer.origin 
+            origin = layer.layer_origin 
             node = pydot.Node(
-                layer.get_str_id(), 
-                label=self.get_label(layer), 
+                layer.node.get_str_id(), 
+                label=self.get_label(layer.node), 
                 # Temporary for demo
                 URL=f"http://www.google.fr/?q={layer}",
                 shape=self.get_shape(origin),
