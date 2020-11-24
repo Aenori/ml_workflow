@@ -133,16 +133,28 @@ class VizUtils:
 
     def create_nodes(self, layers, dot):
         for layer in layers:
-            origin = layer.layer_origin 
-            node = pydot.Node(
-                layer.node.get_str_id(), 
-                label=self.get_label(layer.node), 
-                # Temporary for demo
-                URL=f"http://www.google.fr/?q={layer}",
-                shape=self.get_shape(origin),
-                color=self.get_color(origin)
-            )
-            dot.add_node(node)
+            if len(layer.sub_layers):
+                origin = layer.layer_origin
+                print(f"Origin type : {origin} {type(origin)}")
+                cluster = pydot.Cluster(style='dashed', graph_name=str(origin))
+                if layer.node is not None:
+                    self.create_dot_node(cluster, layer)
+                self.create_nodes(layer.sub_layers, cluster)
+            else:
+                assert(layer.node is not None)
+                self.create_dot_node(dot, layer)
+
+    def create_dot_node(self, dot, layer):
+        origin = layer.layer_origin 
+        node = pydot.Node(
+            layer.node.get_str_id(), 
+            label=self.get_label(layer.node), 
+            # Temporary for demo
+            URL=f"http://www.google.fr/?q={layer}",
+            shape=self.get_shape(origin),
+            color=self.get_color(origin)
+        )
+        dot.add_node(node)
 
     def plot_model(self,
                    model,

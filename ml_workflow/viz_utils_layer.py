@@ -7,9 +7,9 @@ class MlWorkflowNodeLayer:
         self.node = node if len(origin) == 1 else None
         self.layer_origin = origin[0]
 
-        self.previous = []
+        self.previous_layers = []
         self.sub_layers = []
-        # Not used for the moment
+
         self.merged_layers = []
 
         if len(origin) > 1:
@@ -33,12 +33,16 @@ class MlWorkflowNodeLayer:
             self.add_as_sub_layer(MlWorkflowNodeLayer(node, add_previous = False))
             self.add_all_previous_nodes(node.previous)
         else:
-            self.previous.append(MlWorkflowNodeLayer(node, add_previous = True))
+            self.previous_layers.append(MlWorkflowNodeLayer(node, add_previous = True))
 
     def add_as_sub_layer(self, other_layer):
         assert(self.same_origin(other_layer))
         if len(other_layer.sub_layers) == 0:
-            self.merged_layers.append(other_layer)
+            assert(other_layer.node is not None)
+            if self.node is None:
+                self.node = other_layer.node
+            else:
+                self.merged_layers.append(other_layer)
         else:
             assert(len(other_layer.sub_layers) == 1)
             other_sub_layer = other_layer.sub_layers[0]
@@ -51,8 +55,44 @@ class MlWorkflowNodeLayer:
 
     def get_all_root_layers(self):
         res = [self]
-        for layer in self.previous:
+        for layer in self.previous_layers:
             res.extend(layer.get_all_root_layers())
+
+        return res
+
+    def get_all_depending_layers(self):
+        for layer_list in (self.sub_layers, self.previous_layers):
+            for layer in layer_list:
+                yield layer
+
+    def get_all_nodes(self):
+        res = []
+        if self.node:
+            res.append(self.node)
+        for layer in self.get_all_depending_layers():
+            res.extend(layer.get_all_nodes())
+
+        return res
+
+    # Transformation from nodes to layers can result in merging duplicate node. For 
+    # example, if we have something like :
+    #   WorkflowNode(['Rule1']), WorkflowNode(['Rule1', 'Rule2']), WorkflowNode(['Rule1'])
+    # That is, having Rule2 called inside Rule1 between two modifications, we want 
+    # to have only two layer, Rule1 and Rule2, with Rule2 as sublayer of Rule1
+    # Sofor the edge, we will need to redirect both edge id to the merge node
+    def get_duplicated_id(self):
+        res = {}
+        for layer in self.merged_layers:
+            assert(len(layer.sub_layers) == 0)
+            res[layer.node.id] = self.node.id
+        for layer in self.get_all_depending_layers():
+            res.update(layer.get_duplicated_id())
+
+        return res
+
+    def get_all_included_node_id(self):
+        res = set(self.get_duplicated_id().keys())
+        res.update(node.id for node in self.get_all_nodes())
 
         return res
 
