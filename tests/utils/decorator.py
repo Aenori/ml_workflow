@@ -1,19 +1,17 @@
+from .test_utils import compare_or_generate_ref
 
 class ReferenceUsingTest:
     all_ref_files = []
 
     """docstring for  TestWithRef"""
 
-    def __init__(self, file_list):
-        if isinstance(file_list, str):
-            ReferenceUsingTest.all_ref_files.append(file_list)
-        elif isinstance(file_list, list):
-            ReferenceUsingTest.all_ref_files.extend(file_list)
-        else:
-            raise Exception(
-                f"TestWithRef need filename or filelist as ref,"
-                " received {type(f)} {f}"
-            )
+    def __init__(self, filename):
+        ReferenceUsingTest.all_ref_files.append(filename)
+        self.filename = filename
 
     def __call__(self, f):
-        return f
+        def new_f():
+            f()
+            compare_or_generate_ref(self.filename)
+
+        return new_f

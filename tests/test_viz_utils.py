@@ -1,7 +1,6 @@
 import python_path
 
 from utils.decorator import ReferenceUsingTest
-from utils.test_utils import compare_or_generate_ref
 from ml_workflow.viz_utils import VizUtils, plot_model, \
     plot_model_full_detail, get_default_dirname
 import utils
@@ -45,8 +44,6 @@ def test_plot_model_as_png():
 def _test_plot_model(filename):
     leaf_node = get_simple_graph_with_fork()
     plot_model(leaf_node, filename, ts = 'TEST_ts')
-
-    compare_or_generate_ref(filename)
 
 def test_model_to_dot():
     leaf_node = get_simple_graph_with_fork()

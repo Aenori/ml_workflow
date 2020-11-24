@@ -3,6 +3,21 @@ import python_path
 from ml_workflow.workflow_node import WorkflowNode
 from ml_workflow import viz_utils_layer 
 
+import pydot
+
+def test_pydot_behaviour():
+    dot = pydot.Dot()
+
+    node1 = pydot.Node('node1') 
+    dot.add_node(node1)
+    assert([n.get_name() for n in dot.get_node('node1')] == [node1.get_name()])
+
+    cluster = pydot.Cluster(style='dashed', graph_name='sub_graph')
+    node2 = pydot.Node('node2')
+    cluster.add_node(node2)
+    dot.add_subgraph(cluster)
+
+    assert(dot.get_node('node2') == [])
 
 def test_graph_conversion_1():
     node_initial = WorkflowNode(['Source'])

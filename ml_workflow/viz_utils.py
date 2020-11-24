@@ -95,39 +95,52 @@ class VizUtils:
         self.ts = ts if ts else dt.datetime.now().strftime('%Y%m%d_%H%M%S')
         self.expand_nested = expand_nested
 
-    def model_to_dot(self, model, subgraph=False):
+    def model_to_dot(self, model):
         self.raise_error_if_no_pydot()
 
-        dot = self.get_dot_graph(subgraph, model)
-        layers = viz_utils_layer.convert_node_to_layer(model).get_all_root_layers()
+        dot = self.get_dot_graph(model)
+        main_layer = viz_utils_layer.convert_node_to_layer(model)
+        layers = main_layer.get_all_root_layers()
         nodes = model.get_all_nodes()
+        
+        self.check_coherence(model, main_layer)
+
         self.create_nodes(layers, dot)
-        self.add_edges_in_dot(nodes, dot)
+        self.add_edges_in_dot(nodes, dot, main_layer.get_duplicated_id())
 
         return dot
 
-    def add_edges_in_dot(self, layers, dot):
-        for layer in layers:
-            layer_id = layer.get_str_id()
+    def check_coherence(_, model, main_layer):
+        assert((len(main_layer.get_all_nodes()) + len(main_layer.get_duplicated_id())) 
+            == len(model.get_all_nodes()))
+        assert(set(main_layer.get_all_included_node_id()) 
+            == set(node.id for node in model.get_all_nodes()))
 
-            for inbound_node in layer.previous:
-                inbound_layer_id = inbound_node.get_str_id()
-                assert dot.get_node(inbound_layer_id)
-                assert dot.get_node(layer_id)
-                self.add_edge(dot, inbound_layer_id, layer_id)
+    def add_edges_in_dot(self, nodes, dot, duplicated_id):
+        def get_str_id(node):
+            if node.id in duplicated_id:
+                return duplicated_id[node.id].get_str_id()
+            else:
+                return node.get_str_id()
 
 
-    def get_dot_graph(self, subgraph, model):
-        if subgraph:
-            dot = pydot.Cluster(style='dashed', graph_name=model.name)
-            dot.set('label', model.name)
-            dot.set('labeljust', 'l')
-        else:
-            dot = pydot.Dot()
-            dot.set('rankdir', self.rankdir)
-            dot.set('concentrate', True)
-            dot.set('dpi', self.dpi)
-            dot.set_node_defaults(shape='record')
+        for node in nodes:
+            node_id = get_str_id(node)
+
+            for inbound_node in node.previous:
+                inbound_node_id = get_str_id(inbound_node)
+
+                # Inspired source code (tensorflow) check that we have the incoming
+                # node id, not doing it here, because node can be in subgraph
+                self.add_edge(dot, inbound_node_id, node_id)
+
+
+    def get_dot_graph(self, model):
+        dot = pydot.Dot()
+        dot.set('rankdir', self.rankdir)
+        dot.set('concentrate', True)
+        dot.set('dpi', self.dpi)
+        dot.set_node_defaults(shape='record')
 
         return dot
 
@@ -135,8 +148,13 @@ class VizUtils:
         for layer in layers:
             if len(layer.sub_layers):
                 origin = layer.layer_origin
-                print(f"Origin type : {origin} {type(origin)}")
-                cluster = pydot.Cluster(style='dashed', graph_name=str(origin))
+                cluster = pydot.Cluster(
+                    style='dashed', 
+                    graph_name=str(origin),
+                    label=str(origin)
+                )
+                dot.add_subgraph(cluster)
+
                 if layer.node is not None:
                     self.create_dot_node(cluster, layer)
                 self.create_nodes(layer.sub_layers, cluster)

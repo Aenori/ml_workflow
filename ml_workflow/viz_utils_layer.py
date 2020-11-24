@@ -84,7 +84,7 @@ class MlWorkflowNodeLayer:
         res = {}
         for layer in self.merged_layers:
             assert(len(layer.sub_layers) == 0)
-            res[layer.node.id] = self.node.id
+            res[layer.node.id] = self.node
         for layer in self.get_all_depending_layers():
             res.update(layer.get_duplicated_id())
 

@@ -27,6 +27,7 @@ def viz_util_test_rule_2(df):
 
     return df
 
+@ReferenceUsingTest('test_with_subgraph_1.svg')
 def test_sub_graph_1():
     @DataSource(name='viz_util_data_source')
     def data_source():
@@ -41,15 +42,16 @@ def test_sub_graph_1():
 
     df = viz_util_test_rule_3(data_source())
 
-    assert(len(df.ml_workflow_node.get_all_nodes()))
+    assert(len(df.ml_workflow_node.get_all_nodes()) == 3)
 
     assert(len(df.ml_workflow_node.get_all_nodes()[0].origin) == 2)
     assert(len(df.ml_workflow_node.get_all_nodes()[1].origin) == 1)
     assert(len(df.ml_workflow_node.get_all_nodes()[2].origin) == 1)
 
-    df.plot_model('test_with_subgraph_1.png')
+    df.plot_model('test_with_subgraph_1.svg')
 
-def test_sub_graph_1():
+@ReferenceUsingTest('test_with_subgraph_2.svg')
+def test_sub_graph_2():
     @DataSource(name='viz_util_data_source')
     def data_source():
         return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
@@ -68,4 +70,31 @@ def test_sub_graph_1():
     assert(len(df.ml_workflow_node.get_all_nodes()[1].origin) == 2)
     assert(len(df.ml_workflow_node.get_all_nodes()[2].origin) == 1)
 
-    df.plot_model('test_with_subgraph_2.png')
+    df.plot_model('test_with_subgraph_2.svg')
+
+@ReferenceUsingTest('test_with_subgraph_3.svg')
+def test_sub_graph_3():
+    @DataSource(name='viz_util_data_source')
+    def data_source():
+        return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
+
+    @Rule(name='viz_util_test_rule_4')
+    def viz_util_test_rule_4(df):
+        df = viz_util_test_rule_1(df)
+        df = viz_util_test_rule_2(df)
+        return df
+
+    @Rule(name='viz_util_test_rule_5')
+    def viz_util_test_rule_5(df):
+        df = viz_util_test_rule_1(df)
+        df = viz_util_test_rule_4(df)
+
+        return df
+
+    df1 = data_source()
+    df2 = viz_util_test_rule_4(df1)
+    df3 = viz_util_test_rule_5(df2)
+
+    assert(len(df3.ml_workflow_node.get_all_nodes()) == 6)
+
+    df3.plot_model('test_with_subgraph_3.svg')
