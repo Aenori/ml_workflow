@@ -22,33 +22,46 @@ def test_rule_with_args():
     assert(isinstance(f, Rule))
 
 @Rule(name='test_rule.test_catch')
-def f(df):
+def f1(df):
     return pd.DataFrame({'A' : [1]})
+
+@Rule(name='test_rule.test_catch_2', return_tuple=True)
+def f2(df):
+    return (pd.DataFrame({'A' : [1]}), [])
 
 def test_rule_final_catch_with_not_tracable():
     df = pd.DataFrame({'A' : [1]})
-    res1 = f(df)
+    res1 = f1(df)
     
     assert(isinstance(res1, tds.TracableDataFrame))
     assert(len(res1.ml_workflow_node.previous) == 0)
 
 def test_rule_final_catch_with_tracable_positionnal():
     df = tds.TracableDataFrame({'A' : [1]})
-    res1 = f(df)
+    res1 = f1(df)
 
     assert(len(res1.ml_workflow_node.previous) == 1)
     assert(res1.ml_workflow_node.previous[0].columns == ['A'])
 
 def test_rule_final_catch_with_tracable_named():
     df = tds.TracableDataFrame({'A' : [1]})
-    res1 = f(df = df)
+    res1 = f1(df = df)
 
     assert(len(res1.ml_workflow_node.previous) == 1)
     assert(res1.ml_workflow_node.previous[0].columns == ['A'])
 
 def test_rule_final_catch_with_tracable_complex():
     df = tds.TracableDataFrame({'A' : [1]})
-    res1 = f([df])
+    res1 = f1([df])
 
     assert(res1.ml_workflow_node.previous == [])
 
+def test_rule_return_tuple():
+    df = tds.TracableDataFrame({'A' : [1]})
+    res1 = f2(df)
+
+    assert(isinstance(res1[0], tds.TracableDataFrame))
+    assert(not isinstance(res1[1], tds.TracableDataFrame))
+
+    assert(len(res1[0].ml_workflow_node.previous) == 1)
+    assert(res1[0].ml_workflow_node.previous[0].columns == ['A'])

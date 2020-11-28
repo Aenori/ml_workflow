@@ -6,10 +6,6 @@ from . import tracable_data_set
 from . import execution_context
 
 class Rule(WorkflowTracable):
-    AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(
-        set(['context_log'])
-    )
-
     rule_by_name = collections.defaultdict(list)
 
     def __init__(self, **kwargs):
@@ -33,18 +29,28 @@ class Rule(WorkflowTracable):
         res = super().call_as_decorated(*args, **kwargs)
 
         # If res is a tracable type, but not an actual DataFrame, get it back
-        if tracable_data_set.is_tracable_raw_type(res):
-            res = tracable_data_set.get_tracable_data_set(res)
+        if self.return_tuple:
+            res = tuple(map(lambda x : self.handle_result_type(x, args, kwargs), res))
+        else:
+            res = self.handle_result_type(res, args, kwargs)
 
-            filter_tdf = lambda l: list(filter(tracable_data_set.is_tracable_data_set, l))
+        return res
 
-            res_previous = filter_tdf(args)
-            res_previous.extend(filter_tdf(kwargs.values()))
+    def handle_result_type(self, res, args, kwargs):
+        if not tracable_data_set.is_tracable_raw_type(res):
+            return res
 
-            res.set_workflow_origin(
-                execution_context.get_current_full_context(), 
-                previous = res_previous
-            )
+        res = tracable_data_set.get_tracable_data_set(res)
+
+        filter_tdf = lambda l: list(filter(tracable_data_set.is_tracable_data_set, l))
+
+        res_previous = filter_tdf(args)
+        res_previous.extend(filter_tdf(kwargs.values()))
+
+        res.set_workflow_origin(
+            execution_context.get_current_full_context(), 
+            previous = res_previous
+        )
 
         return res
 

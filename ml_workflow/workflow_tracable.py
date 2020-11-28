@@ -10,7 +10,11 @@ from packaging import version
 logger = logging.getLogger(__name__)
 
 class WorkflowTracable(Decorator):
-    AUTHORISED_ATTR = set(['name', 'highlight', 'version', 'branch', 'tags', 'author', 'created_at'])
+    AUTHORISED_ATTR = set([
+        'name', 'highlight', 'author', 'created_at',
+        'version', 'branch', 'tags',
+        'return_tuple'
+    ])
     VALID_NAME_RE = re.compile("^[a-zA-Z0-9_\-\.]+$")
 
     def __init__(self, **kwargs):
@@ -21,10 +25,16 @@ class WorkflowTracable(Decorator):
                 f"Unauthorized keys for {self.__class__} :"
                 f" {unauthorised_keys}")
 
+        # Default value
+        self.set_default_values()
+
         self.__dict__.update(kwargs)
         if 'version' in kwargs:
             self.version = version.parse(kwargs['version'])
         self.__check_name()
+
+    def set_default_values(self):
+        self.return_tuple = False
 
     # This method is called by Decorator.__call__, after the first call,
     # as a decorator
