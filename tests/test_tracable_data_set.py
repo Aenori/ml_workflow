@@ -2,6 +2,7 @@ import python_path
 
 from ml_workflow.context_utils import no_context_rule
 from ml_workflow.tracable_data_set import TracableDataFrame
+import ml_workflow.tracable_data_set as tds
 import utils
 from ml_workflow.workflow_node import WorkflowNode
 import ml_workflow
@@ -74,4 +75,15 @@ def test_tracable_data_set_init():
     df = TracableDataFrame({'Age': [1, 67, 89, 10, 20]})
     assert(df.ml_workflow_node is None)
 
+def test_is_tracable_type():
+    assert(tds.is_tracable_type([]))
+    assert(tds.is_tracable_type(tds.get_tracable_data_set([])))
+
+def test_is_tracable_data_set():
+    assert(not tds.is_tracable_data_set([]))
+    assert(tds.is_tracable_data_set(tds.get_tracable_data_set([])))
+
+def test_is_tracable_raw_type():
+    assert(tds.is_tracable_raw_type([]))
+    assert(not tds.is_tracable_raw_type(tds.get_tracable_data_set([])))
 

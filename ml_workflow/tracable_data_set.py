@@ -81,3 +81,14 @@ returns something else that supported types : [pd.DataFrame, list]
 """
 
     raise Exception(msg)
+
+# NB : Using metaclass might help making the following lines more generic.
+# But well, let's find som equilibrium between complexity and genericity ... 
+def is_tracable_type(object_):
+    return isinstance(object_, (list, pd.DataFrame))
+
+def is_tracable_data_set(object_):
+    return isinstance(object_, (TracableList, TracableDataFrame))
+
+def is_tracable_raw_type(object_):
+    return is_tracable_type(object_) and not is_tracable_data_set(object_)

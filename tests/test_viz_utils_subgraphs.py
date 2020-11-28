@@ -29,6 +29,8 @@ def viz_util_test_rule_2(df):
 
 @ReferenceUsingTest('test_with_subgraph_1.svg')
 def test_sub_graph_1():
+    WorkflowNode._next_id = 0
+
     @DataSource(name='viz_util_data_source')
     def data_source():
         return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
@@ -52,6 +54,8 @@ def test_sub_graph_1():
 
 @ReferenceUsingTest('test_with_subgraph_2.svg')
 def test_sub_graph_2():
+    WorkflowNode._next_id = 0
+
     @DataSource(name='viz_util_data_source')
     def data_source():
         return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})
@@ -74,6 +78,8 @@ def test_sub_graph_2():
 
 @ReferenceUsingTest('test_with_subgraph_3.svg')
 def test_sub_graph_3():
+    WorkflowNode._next_id = 0
+    
     @DataSource(name='viz_util_data_source')
     def data_source():
         return pd.DataFrame({'A' : [1, 2, 3], 'B' : [3, 4, 5]})

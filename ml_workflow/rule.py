@@ -2,6 +2,7 @@ from .workflow_tracable import WorkflowTracable
 import collections
 from . import rule_reference
 from . import rule_config_manager
+from . import tracable_data_set
 
 class Rule(WorkflowTracable):
     AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(
@@ -24,6 +25,24 @@ class Rule(WorkflowTracable):
         this_rule_reference = rule_reference.RuleReference.dict_by_name.get(self.name)
         if this_rule_reference:
             this_rule_reference.check_coherence(self)
+
+    # This method is called by Decorator.__call__, after the first call,
+    # as a decorator
+    def call_as_decorated(self, *args, **kwargs):
+        res = super().call_as_decorated(*args, **kwargs)
+
+        # If res is a tracable type, but not an actual DataFrame, get it back
+        if tracable_data_set.is_tracable_raw_type(res):
+            res = tracable_data_set.get_tracable_data_set(res)
+
+            filter_tdf = lambda l: list(filter(tracable_data_set.is_tracable_data_set, l))
+
+            res_previous = filter_tdf(args)
+            res_previous.extend(filter_tdf(kwargs.values()))
+            
+            res.set_workflow_origin(res_previous)
+
+        return res
 
     @classmethod
     def set_for_reference_name(_, name, rule):
