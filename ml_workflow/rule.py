@@ -3,6 +3,7 @@ import collections
 from . import rule_reference
 from . import rule_config_manager
 from . import tracable_data_set
+from . import execution_context
 
 class Rule(WorkflowTracable):
     AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(
@@ -39,8 +40,11 @@ class Rule(WorkflowTracable):
 
             res_previous = filter_tdf(args)
             res_previous.extend(filter_tdf(kwargs.values()))
-            
-            res.set_workflow_origin(res_previous)
+
+            res.set_workflow_origin(
+                execution_context.get_current_full_context(), 
+                previous = res_previous
+            )
 
         return res
 
