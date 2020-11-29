@@ -26,9 +26,12 @@ class Decorator:
 
     def get_definition_location(self):
         f = self.source_function
+        if f is None:
+            return 'NA'
+
         res = f"{f.__globals__['__file__']}:{f.__code__.co_firstlineno}"
         if res.startswith(os.getcwd()):
-            res = res.replace(os.getcwd(), '')
+                res = res.replace(os.getcwd(), '')
 
         return res
 
