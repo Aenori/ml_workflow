@@ -222,7 +222,7 @@ def plot_model_full_detail(model, directory = None, expand_nested=True, ts = Non
 
     return VizUtils(expand_nested=expand_nested, ts=ts).plot_model(model, to_file)
 
-def plot_model(model, to_file='model.png', expand_nested=True, ts=None):
+def plot_model(model, to_file='model.svg', expand_nested=True, ts=None):
     """Plot_model is creating an image of the model, representing the differents
  steps, datasource, and so on"""
 
