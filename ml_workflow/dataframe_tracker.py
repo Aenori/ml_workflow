@@ -1,5 +1,5 @@
 from .workflow_node import get_user_code_origine_workflow
-from .workflow_node import WorkflowNode, WorkflowNodeRule
+from .workflow_node import WorkflowNode
 from .tracable_data_set import TracableDataFrame, get_tracable_structure
 from .context_utils import get_current_context
 
@@ -9,7 +9,6 @@ from .function_utils import prevent_exception
 class DataFrameTracker:
     def handle_setitem(self, super_method, tr_df, key, value):
         self.handle_in_place(super_method, tr_df, key, value)
-        tr_df.ml_workflow_node.add_modified_key(key)
 
     def handle_merge(self, super_method, tr_df, right, *args, **kwargs):
         res = self.handle_with_return(super_method, tr_df, right, *args, **kwargs)
@@ -49,7 +48,7 @@ class DataFrameTracker:
         current_context = get_current_context()
 
         if not input_df.ml_workflow_node.match_origin(current_context):
-            result_df.ml_workflow_node = WorkflowNodeRule(
+            result_df.ml_workflow_node = WorkflowNode(
                 current_context,
                 previous = input_df.ml_workflow_node,
                 tracable_item=result_df

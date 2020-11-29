@@ -65,3 +65,23 @@ def test_rule_return_tuple():
 
     assert(len(res1[0].ml_workflow_node.previous) == 1)
     assert(res1[0].ml_workflow_node.previous[0].tracable_item.columns == ['A'])
+
+def test_force_final_handling():
+    @Rule(name='temp1')
+    def f(df):
+        df['A'] += 1
+
+        return df
+
+    @Rule(name='temp2', force_final_handling=True)
+    def g(df):
+        df = f(df)
+        df['B'] = df['A']
+
+        return df
+
+    df = tds.TracableDataFrame({'A' : [1]})
+
+    df2 = g(df)
+    # temp1 should not be recorded here
+    assert(repr(list(map(lambda x : x.origin, df2.ml_workflow_node.get_all_nodes()))) == '[(temp2,), (<SpecialOrigin.USER_CODE: 0>,)]')

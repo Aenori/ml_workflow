@@ -13,7 +13,7 @@ class WorkflowTracable(Decorator):
     AUTHORISED_ATTR = set([
         'name', 'highlight', 'author', 'created_at',
         'version', 'branch', 'tags',
-        'return_tuple'
+        'return_tuple', 
     ])
     VALID_NAME_RE = re.compile("^[a-zA-Z0-9_\-\.]+$")
 
@@ -53,6 +53,9 @@ class WorkflowTracable(Decorator):
         return self.source_function(*args, **kwargs)
 
     def __str__(self):
+        return self.name
+
+    def __repr__(self):
         return self.name
 
     def __enter__(self):

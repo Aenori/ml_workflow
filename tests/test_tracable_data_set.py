@@ -31,15 +31,11 @@ def test_tracable_data_set():
     assert(df.ml_workflow_node.get_graph_size() == 4)
 
     assert(df.ml_workflow_node.get_leaf_origin() is no_context_rule)
-    assert(df.ml_workflow_node.modified_keys ==
-           set(['IsYoung', 'DansLaQuarantaine']))
 
     node = df.ml_workflow_node.get_previous_node()
     assert(node.get_leaf_origin() is set_is_old_from_age)
-    assert(node.modified_keys == set(['IsOld']))
 
     node = node.get_previous_node()
-    assert(node.modified_keys == set(['Age']))
 
     node = node.get_previous_node()
     assert(node.get_previous_node() is None)

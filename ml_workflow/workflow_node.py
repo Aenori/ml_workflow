@@ -92,19 +92,6 @@ class WorkflowNode:
     def get_root_origin(self):
         return self.origin[0]
 
-class WorkflowNodeRule(WorkflowNode):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.modified_keys = set()
-
-    def add_modified_key(self, key):
-        if isinstance(key, (int, str)):
-            self.modified_keys.add(key)
-        elif isinstance(key, (list, set)):
-            self.modified_keys.update(key)
-        else:
-            raise Exception(f'Unknown key type {type(key)}')
-
 class SpecialOrigin(Enum):
     USER_CODE = 0
 
