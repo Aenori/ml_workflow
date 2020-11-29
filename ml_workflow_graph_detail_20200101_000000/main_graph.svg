@@ -9,9 +9,9 @@
 <g id="graph0" class="graph" transform="rotate(0) translate(4 128.25)">
 <title>G</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-128.25 111,-128.25 111,4 -4,4"/>
-<!-- Workflow_node_40 -->
+<!-- Workflow_node_44 -->
 <g id="node1" class="node">
-<title>Workflow_node_40</title>
+<title>Workflow_node_44</title>
 <g id="a_node1"><a xlink:href="http://www.google.fr/?q=test_rule" xlink:title="test_rule">
 <polygon fill="none" stroke="#c0c0c0" points="85,-36 22,-36 22,0 85,0 85,-36"/>
 <text text-anchor="middle" x="53.5" y="-14.3" font-family="Times,serif" font-size="14.00" fill="#000000">test_rule</text>
@@ -29,9 +29,9 @@
 </a>
 </g>
 </g>
-<!-- Workflow_node_17&#45;&gt;Workflow_node_40 -->
+<!-- Workflow_node_17&#45;&gt;Workflow_node_44 -->
 <g id="edge1" class="edge">
-<title>Workflow_node_17&#45;&gt;Workflow_node_40</title>
+<title>Workflow_node_17&#45;&gt;Workflow_node_44</title>
 <path fill="none" stroke="#000000" d="M53.5,-71.8891C53.5,-63.6738 53.5,-54.5744 53.5,-46.2279"/>
 <polygon fill="#000000" stroke="#000000" points="57.0001,-46.1816 53.5,-36.1816 50.0001,-46.1816 57.0001,-46.1816"/>
 </g>

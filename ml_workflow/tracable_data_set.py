@@ -35,14 +35,23 @@ class TracableDataSetUtils:
         if previous is None:
             previous = []
 
-        self.ml_workflow_node = WorkflowNode(
-            workflow_tracable,
-            previous=previous
-        )
+        self.set_ml_workflow_node(workflow_tracable, previous)
 
     def set_default_ml_workflow_node_if_isnt_any(self):
         if self.ml_workflow_node is None:
             self.ml_workflow_node = get_user_code_origine_workflow()
+
+    def get_workflow_node_not_null(self):
+        if self.ml_workflow_node is None:
+            return get_user_code_origine_workflow(tracable_item = self)
+        return self.ml_workflow_node
+
+    def set_ml_workflow_node(self, workflow_tracable, previous):
+        self.ml_workflow_node = WorkflowNode(
+            workflow_tracable,
+            previous = previous,
+            tracable_item = self
+        )
 
 pandas_class_to_wrapper = {}
 
@@ -55,18 +64,7 @@ class TracableDataFrame(pd.DataFrame, TracableDataSetUtils): pass
 
 pandas_class_to_wrapper[pd.DataFrame] = TracableDataFrame
 
-class TracableList(list):
-    def set_workflow_origin(self, workflow_tracable, previous = None):
-        if previous is None:
-            previous = []
-
-        self.ml_workflow_node = WorkflowNode(
-            workflow_tracable,
-            previous=previous
-        )
-
-    def __eq__(self, other):
-        return super().__eq__(other)
+class TracableList(list, TracableDataSetUtils): pass
 
 def get_tracable_data_set(data_set):
     if isinstance(data_set, pd.DataFrame):

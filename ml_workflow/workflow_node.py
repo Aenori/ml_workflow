@@ -15,16 +15,23 @@ class WorkflowNode:
         
         return cls._next_id
 
-    def __init__(self, origin, previous=[]):
+    def __init__(self, origin, previous=[], tracable_item=None):
         # origin should be a list of applied WorfflowTracable (Rule and DataSource)
         assert(isinstance(origin, (tuple, list)))
         self.origin = tuple(origin)
         assert(len(origin) > 0)
-        
+
         self.id = self.get_next_id()
         self.previous = previous if isinstance(previous, list) else [previous]
+
+        for prev in self.previous:
+            if not isinstance(prev, WorkflowNode):
+                raise Exception(f"Uncompatible previous type received : {type(prev)}")
+
         self.logs = []
         self.stats = {}
+
+        self.tracable_item = tracable_item
 
     def __str__(self):
         return str(self.get_leaf_origin())
@@ -85,10 +92,9 @@ class WorkflowNode:
     def get_root_origin(self):
         return self.origin[0]
 
-
 class WorkflowNodeRule(WorkflowNode):
-    def __init__(self, rule, previous=[]):
-        super().__init__(rule, previous)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.modified_keys = set()
 
     def add_modified_key(self, key):
@@ -99,10 +105,8 @@ class WorkflowNodeRule(WorkflowNode):
         else:
             raise Exception(f'Unknown key type {type(key)}')
 
-
 class SpecialOrigin(Enum):
     USER_CODE = 0
 
-
-def get_user_code_origine_workflow():
-    return WorkflowNode([SpecialOrigin.USER_CODE])
+def get_user_code_origine_workflow(tracable_item = None):
+    return WorkflowNode([SpecialOrigin.USER_CODE], tracable_item = tracable_item)

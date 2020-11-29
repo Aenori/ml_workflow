@@ -41,14 +41,14 @@ def test_rule_final_catch_with_tracable_positionnal():
     res1 = f1(df)
 
     assert(len(res1.ml_workflow_node.previous) == 1)
-    assert(res1.ml_workflow_node.previous[0].columns == ['A'])
+    assert(res1.ml_workflow_node.previous[0].tracable_item.columns == ['A'])
 
 def test_rule_final_catch_with_tracable_named():
     df = tds.TracableDataFrame({'A' : [1]})
     res1 = f1(df = df)
 
     assert(len(res1.ml_workflow_node.previous) == 1)
-    assert(res1.ml_workflow_node.previous[0].columns == ['A'])
+    assert(res1.ml_workflow_node.previous[0].tracable_item.columns == ['A'])
 
 def test_rule_final_catch_with_tracable_complex():
     df = tds.TracableDataFrame({'A' : [1]})
@@ -64,4 +64,4 @@ def test_rule_return_tuple():
     assert(not isinstance(res1[1], tds.TracableDataFrame))
 
     assert(len(res1[0].ml_workflow_node.previous) == 1)
-    assert(res1[0].ml_workflow_node.previous[0].columns == ['A'])
+    assert(res1[0].ml_workflow_node.previous[0].tracable_item.columns == ['A'])

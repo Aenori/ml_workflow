@@ -17,7 +17,7 @@ class DataFrameTracker:
             right.set_default_ml_workflow_node_if_isnt_any()
             right_ml_workflow_node = right.ml_workflow_node
         else:
-            right_ml_workflow_node = WorkflowNode(['Untracked DataFrame'])
+            right_ml_workflow_node = WorkflowNode(['Untracked DataFrame'], tracable_item=right)
 
         res.ml_workflow_node.previous.append(right_ml_workflow_node)
 
@@ -51,7 +51,8 @@ class DataFrameTracker:
         if not input_df.ml_workflow_node.match_origin(current_context):
             result_df.ml_workflow_node = WorkflowNodeRule(
                 current_context,
-                previous = input_df.ml_workflow_node
+                previous = input_df.ml_workflow_node,
+                tracable_item=result_df
             )
         else:
             # In case of inplace modification it does nothing, which is ok

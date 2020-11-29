@@ -43,7 +43,10 @@ class Rule(WorkflowTracable):
 
         res = tracable_data_set.get_tracable_data_set(res)
 
-        filter_tdf = lambda l: list(filter(tracable_data_set.is_tracable_data_set, l))
+        filter_tdf = lambda l: [
+            arg.get_workflow_node_not_null() 
+            for arg in (filter(tracable_data_set.is_tracable_data_set, l))
+        ]
 
         res_previous = filter_tdf(args)
         res_previous.extend(filter_tdf(kwargs.values()))

@@ -22,7 +22,6 @@ class ExecutionContext:
 def notify_entry(workflow_tracable):
     ExecutionContext.context_by_thread[threading.get_ident()].append(workflow_tracable)
 
-
 def notify_exit(workflow_tracable):
     assert(ExecutionContext.context_by_thread[threading.get_ident()][-1] is workflow_tracable)
     ExecutionContext.context_by_thread[threading.get_ident()].pop()
