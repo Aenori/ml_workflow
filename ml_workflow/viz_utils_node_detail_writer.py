@@ -1,12 +1,13 @@
 import os
 import jinja2
 
+this_dir_name = os.path.dirname(os.path.dirname(__file__))
+
 def get_template():
     try:
         return get_template.template
     except AttributeError:
-        print("Loading template/workflow_tracable.html ...")
-        with open('template/workflow_tracable.html', 'r') as f:
+        with open(f'{this_dir_name}/template/workflow_tracable.html', 'r') as f:
             get_template.template = jinja2.Template(f.read())
         return get_template.template
 
