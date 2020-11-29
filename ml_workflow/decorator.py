@@ -7,11 +7,12 @@ class Decorator:
         self.source_function = None
 
     def __call__(self, *args, **kwargs):
-        if self.source_function is None:
-            self.call_as_decorator(*args, **kwargs)
-            return self
+        with self:
+            if self.source_function is None:
+                self.call_as_decorator(*args, **kwargs)
+                return self
 
-        return self.call_as_decorated(*args, **kwargs)
+            return self.call_as_decorated(*args, **kwargs)
 
     def call_as_decorator(self, *args, **kwargs):
         if ((len(args) != 1) or (len(kwargs) != 0)):
@@ -30,4 +31,10 @@ class Decorator:
             res = res.replace(os.getcwd(), '')
 
         return res
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, type, value, traceback):
+        pass
         

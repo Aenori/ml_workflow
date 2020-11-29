@@ -19,6 +19,8 @@ class WorkflowNode:
         # origin should be a list of applied WorfflowTracable (Rule and DataSource)
         assert(isinstance(origin, (tuple, list)))
         self.origin = tuple(origin)
+        assert(len(origin) > 0)
+        
         self.id = self.get_next_id()
         self.previous = previous if isinstance(previous, list) else [previous]
         self.logs = []

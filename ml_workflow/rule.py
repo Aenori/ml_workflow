@@ -29,10 +29,11 @@ class Rule(WorkflowTracable):
         res = super().call_as_decorated(*args, **kwargs)
 
         # If res is a tracable type, but not an actual DataFrame, get it back
-        if self.return_tuple:
-            res = tuple(map(lambda x : self.handle_result_type(x, args, kwargs), res))
-        else:
-            res = self.handle_result_type(res, args, kwargs)
+        with self:
+            if self.return_tuple:
+                res = tuple(map(lambda x : self.handle_result_type(x, args, kwargs), res))
+            else:
+                res = self.handle_result_type(res, args, kwargs)
 
         return res
 

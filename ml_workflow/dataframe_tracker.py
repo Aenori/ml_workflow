@@ -39,6 +39,12 @@ class DataFrameTracker:
         
         return result
 
+    def handle_with_inplace_param(self, super_method, tr_df, *args, **kwargs):
+        if kwargs.get('inplace', False):
+            self.handle_in_place(super_method, tr_df, *args, **kwargs)
+        else:
+            return self.handle_with_return(super_method, tr_df, *args, **kwargs)
+
     def set_result_df_node(self, input_df, result_df):
         current_context = get_current_context()
 
@@ -63,7 +69,7 @@ class DataFrameTracker:
         self.add_notification_to(TracableDataFrame, '__setitem__', self.handle_setitem)
         self.add_notification_to(TracableDataFrame, 'merge', self.handle_merge)
         self.add_notification_to(TracableDataFrame, '__getitem__', self.handle_with_return)
-
+        self.add_notification_to(TracableDataFrame, 'sort_values', self.handle_with_inplace_param)
 
 dataframe_tracker_singleton = DataFrameTracker()
 dataframe_tracker_singleton.init_df_monitoring()

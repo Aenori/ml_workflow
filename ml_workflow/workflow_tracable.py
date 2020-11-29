@@ -50,10 +50,7 @@ class WorkflowTracable(Decorator):
         return res
 
     def call(self, *args, **kwargs):
-        with self:
-            res = self.source_function(*args, **kwargs)
-
-        return res
+        return self.source_function(*args, **kwargs)
 
     def __str__(self):
         return self.name

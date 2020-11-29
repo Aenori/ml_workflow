@@ -87,3 +87,16 @@ def test_is_tracable_raw_type():
     assert(tds.is_tracable_raw_type([]))
     assert(not tds.is_tracable_raw_type(tds.get_tracable_data_set([])))
 
+def test_sort_values_inplace():
+    df = TracableDataFrame({'Id': [1,2], 'Age': [67, 1]})
+    df.sort_values(by=['Age', 'Id'], inplace=True)
+    
+    assert((df['Id'] == [2, 1]).all())
+    assert(isinstance(df, TracableDataFrame))
+
+def test_sort_values_with_return():
+    df = TracableDataFrame({'Id': [1,2], 'Age': [67, 1]})
+    df = df.sort_values(by=['Age', 'Id'])
+
+    assert((df['Id'] == [2, 1]).all())
+    assert(isinstance(df, TracableDataFrame))    

@@ -21,10 +21,10 @@ def get_simple_fork_network():
 
 
 def test_constructor_polymorphism():
-    root = WorkflowNode([])
-    child = WorkflowNode([], previous=root)
+    root = WorkflowNode([1])
+    child = WorkflowNode([1], previous=root)
     assert(child.previous == [root])
-    child = WorkflowNode([], previous=[root])
+    child = WorkflowNode([1], previous=[root])
     assert(child.previous == [root])
 
 
