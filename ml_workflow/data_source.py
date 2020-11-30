@@ -1,6 +1,8 @@
+
 from .workflow_tracable import WorkflowTracable
 from .tracable_data_set import get_tracable_data_set
-
+from .misc_utils import TimeIt
+from . import execution_context
 
 class DataSource(WorkflowTracable):
     AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(
@@ -30,6 +32,19 @@ class DataSource(WorkflowTracable):
 
         if hasattr(self, 'frozen_ignore_args'):
             self.handle_frozen_ignore_args(self.frozen_ignore_args)
+    
+    # This method is called by Decorator.__call__, after the first call,
+    # as a decorator
+    def call_as_decorated(self, *args, **kwargs):
+        with TimeIt() as t:
+            res = self.call(*args, **kwargs)
+
+        # Rule can be used to return other things than a TracableDataSet
+        if hasattr(res, 'ml_workflow_node'):
+            res.ml_workflow_node.add_stat('duration', t.duration())
+            res.ml_workflow_node.add_logs(execution_context.ExecutionContext.flush_logs())
+
+        return res
 
     def handle_frozen_ignore_args(self, frozen_ignore_args):
         self.frozen_ignore_args_positions = [

@@ -39,15 +39,7 @@ class WorkflowTracable(Decorator):
     # This method is called by Decorator.__call__, after the first call,
     # as a decorator
     def call_as_decorated(self, *args, **kwargs):
-        with TimeIt() as t:
-            res = self.call(*args, **kwargs)
-
-        # Rule can be used to return other things than a TracableDataSet
-        if hasattr(res, 'ml_workflow_node'):
-            res.ml_workflow_node.add_stat('duration', t.duration())
-            res.ml_workflow_node.add_logs(execution_context.ExecutionContext.flush_logs())
-
-        return res
+        raise NotImplementedError()
 
     def call(self, *args, **kwargs):
         return self.source_function(*args, **kwargs)

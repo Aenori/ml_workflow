@@ -1,6 +1,8 @@
 import os
 import jinja2
 
+# Not very clean way to handle path, but since we are using only one
+# template, it doesn't matter much.
 this_dir_name = os.path.dirname(os.path.dirname(__file__))
 
 def get_template():

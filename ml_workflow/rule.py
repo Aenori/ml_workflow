@@ -1,9 +1,11 @@
-from .workflow_tracable import WorkflowTracable
 import collections
+
+from .workflow_tracable import WorkflowTracable
 from . import rule_reference
 from . import rule_config_manager
 from . import tracable_data_set
 from . import execution_context
+from .misc_utils import TimeIt
 
 class Rule(WorkflowTracable):
     AUTHORISED_ATTR = WorkflowTracable.AUTHORISED_ATTR.union(set(['force_final_handling']))
@@ -35,13 +37,19 @@ class Rule(WorkflowTracable):
         if self.force_final_handling:
             self.temp_previous = self.extract_previous(args, kwargs)
 
-        res = super().call_as_decorated(*args, **kwargs)
+        with TimeIt() as t:
+            res = self.call(*args, **kwargs)
 
         # If res is a tracable type, but not an actual DataFrame, get it back
         if self.return_tuple:
             res = tuple(map(lambda x : self.handle_result_type(x, args, kwargs), res))
         else:
             res = self.handle_result_type(res, args, kwargs)
+
+        # Rule can be used to return other things than a TracableDataSet
+        if hasattr(res, 'ml_workflow_node'):
+            res.ml_workflow_node.add_stat('duration', t.duration())
+            res.ml_workflow_node.add_logs(execution_context.ExecutionContext.flush_logs())
 
         return res
 
