@@ -100,6 +100,8 @@ class VizUtils:
                 return 'red'
             elif origin.highlight == 1:
                 return 'green'
+            elif origin.get_branch():
+                return 'blue'
             else:
                 return 'grey'
         except AttributeError:
@@ -171,7 +173,8 @@ class VizUtils:
             if len(layer.sub_layers):
                 origin = layer.layer_origin
                 cluster = pydot.Cluster(
-                    style='dashed', 
+                    style='dashed',
+                    color=VizUtils.get_color(origin),
                     graph_name=str(origin),
                     label=VizUtils.get_label(origin)
                 )

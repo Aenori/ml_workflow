@@ -11,85 +11,85 @@
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-457.25 178,-457.25 178,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster_viz_util_test_rule_5</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="5,2" points="8,-8 8,-238 166,-238 166,-8 8,-8"/>
+<polygon fill="none" stroke="#c0c0c0" stroke-dasharray="5,2" points="8,-8 8,-238 166,-238 166,-8 8,-8"/>
 <text text-anchor="middle" x="87" y="-222.8" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_5</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster_viz_util_test_rule_4</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="5,2" points="16,-16 16,-163 158,-163 158,-16 16,-16"/>
+<polygon fill="none" stroke="#c0c0c0" stroke-dasharray="5,2" points="16,-16 16,-163 158,-163 158,-16 16,-16"/>
 <text text-anchor="middle" x="87" y="-147.8" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_4</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_viz_util_test_rule_4</title>
-<polygon fill="none" stroke="#000000" stroke-dasharray="5,2" points="16,-246 16,-393 158,-393 158,-246 16,-246"/>
+<polygon fill="none" stroke="#c0c0c0" stroke-dasharray="5,2" points="16,-246 16,-393 158,-393 158,-246 16,-246"/>
 <text text-anchor="middle" x="87" y="-377.8" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_4</text>
 </g>
-<!-- Workflow_node_52 -->
+<!-- Workflow_node_11 -->
 <g id="node1" class="node">
-<title>Workflow_node_52</title>
+<title>Workflow_node_11</title>
 <g id="a_node1"><a xlink:href="http://www.google.fr/?q=viz_util_test_rule_2" xlink:title="viz_util_test_rule_2">
 <polygon fill="none" stroke="#c0c0c0" points="149.5,-60 24.5,-60 24.5,-24 149.5,-24 149.5,-60"/>
 <text text-anchor="middle" x="87" y="-38.3" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_2</text>
 </a>
 </g>
 </g>
-<!-- Workflow_node_50 -->
+<!-- Workflow_node_9 -->
 <g id="node2" class="node">
-<title>Workflow_node_50</title>
+<title>Workflow_node_9</title>
 <g id="a_node2"><a xlink:href="http://www.google.fr/?q=viz_util_test_rule_1" xlink:title="viz_util_test_rule_1">
 <polygon fill="none" stroke="#c0c0c0" points="149.5,-132 24.5,-132 24.5,-96 149.5,-96 149.5,-132"/>
 <text text-anchor="middle" x="87" y="-110.3" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_1</text>
 </a>
 </g>
 </g>
-<!-- Workflow_node_50&#45;&gt;Workflow_node_52 -->
+<!-- Workflow_node_9&#45;&gt;Workflow_node_11 -->
 <g id="edge1" class="edge">
-<title>Workflow_node_50&#45;&gt;Workflow_node_52</title>
+<title>Workflow_node_9&#45;&gt;Workflow_node_11</title>
 <path fill="none" stroke="#000000" d="M87,-95.8314C87,-88.131 87,-78.9743 87,-70.4166"/>
 <polygon fill="#000000" stroke="#000000" points="90.5001,-70.4132 87,-60.4133 83.5001,-70.4133 90.5001,-70.4132"/>
 </g>
-<!-- Workflow_node_48 -->
+<!-- Workflow_node_7 -->
 <g id="node3" class="node">
-<title>Workflow_node_48</title>
+<title>Workflow_node_7</title>
 <g id="a_node3"><a xlink:href="http://www.google.fr/?q=viz_util_test_rule_1" xlink:title="viz_util_test_rule_1">
 <polygon fill="none" stroke="#c0c0c0" points="149.5,-207 24.5,-207 24.5,-171 149.5,-171 149.5,-207"/>
 <text text-anchor="middle" x="87" y="-185.3" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_1</text>
 </a>
 </g>
 </g>
-<!-- Workflow_node_48&#45;&gt;Workflow_node_50 -->
+<!-- Workflow_node_7&#45;&gt;Workflow_node_9 -->
 <g id="edge2" class="edge">
-<title>Workflow_node_48&#45;&gt;Workflow_node_50</title>
+<title>Workflow_node_7&#45;&gt;Workflow_node_9</title>
 <path fill="none" stroke="#000000" d="M87,-170.8446C87,-162.3401 87,-152.0076 87,-142.4964"/>
 <polygon fill="#000000" stroke="#000000" points="90.5001,-142.2481 87,-132.2482 83.5001,-142.2482 90.5001,-142.2481"/>
 </g>
-<!-- Workflow_node_46 -->
+<!-- Workflow_node_5 -->
 <g id="node4" class="node">
-<title>Workflow_node_46</title>
+<title>Workflow_node_5</title>
 <g id="a_node4"><a xlink:href="http://www.google.fr/?q=viz_util_test_rule_2" xlink:title="viz_util_test_rule_2">
 <polygon fill="none" stroke="#c0c0c0" points="149.5,-290 24.5,-290 24.5,-254 149.5,-254 149.5,-290"/>
 <text text-anchor="middle" x="87" y="-268.3" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_2</text>
 </a>
 </g>
 </g>
-<!-- Workflow_node_46&#45;&gt;Workflow_node_48 -->
+<!-- Workflow_node_5&#45;&gt;Workflow_node_7 -->
 <g id="edge3" class="edge">
-<title>Workflow_node_46&#45;&gt;Workflow_node_48</title>
+<title>Workflow_node_5&#45;&gt;Workflow_node_7</title>
 <path fill="none" stroke="#000000" d="M87,-253.9902C87,-243.2963 87,-229.4994 87,-217.3706"/>
 <polygon fill="#000000" stroke="#000000" points="90.5001,-217.2612 87,-207.2612 83.5001,-217.2613 90.5001,-217.2612"/>
 </g>
-<!-- Workflow_node_44 -->
+<!-- Workflow_node_3 -->
 <g id="node5" class="node">
-<title>Workflow_node_44</title>
+<title>Workflow_node_3</title>
 <g id="a_node5"><a xlink:href="http://www.google.fr/?q=viz_util_test_rule_1" xlink:title="viz_util_test_rule_1">
 <polygon fill="none" stroke="#c0c0c0" points="149.5,-362 24.5,-362 24.5,-326 149.5,-326 149.5,-362"/>
 <text text-anchor="middle" x="87" y="-340.3" font-family="Times,serif" font-size="14.00" fill="#000000">viz_util_test_rule_1</text>
 </a>
 </g>
 </g>
-<!-- Workflow_node_44&#45;&gt;Workflow_node_46 -->
+<!-- Workflow_node_3&#45;&gt;Workflow_node_5 -->
 <g id="edge4" class="edge">
-<title>Workflow_node_44&#45;&gt;Workflow_node_46</title>
+<title>Workflow_node_3&#45;&gt;Workflow_node_5</title>
 <path fill="none" stroke="#000000" d="M87,-325.8314C87,-318.131 87,-308.9743 87,-300.4166"/>
 <polygon fill="#000000" stroke="#000000" points="90.5001,-300.4132 87,-290.4133 83.5001,-300.4133 90.5001,-300.4132"/>
 </g>
@@ -104,9 +104,9 @@
 </a>
 </g>
 </g>
-<!-- Workflow_node_1&#45;&gt;Workflow_node_44 -->
+<!-- Workflow_node_1&#45;&gt;Workflow_node_3 -->
 <g id="edge5" class="edge">
-<title>Workflow_node_1&#45;&gt;Workflow_node_44</title>
+<title>Workflow_node_1&#45;&gt;Workflow_node_3</title>
 <path fill="none" stroke="#000000" d="M87,-400.8237C87,-391.7984 87,-381.6581 87,-372.4688"/>
 <polygon fill="#000000" stroke="#000000" points="90.5001,-372.2421 87,-362.2421 83.5001,-372.2422 90.5001,-372.2421"/>
 </g>
