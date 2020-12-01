@@ -1,8 +1,7 @@
 import pandas as pd
-from . import viz_utils
 
-from .workflow_node import WorkflowNode
-from .workflow_node import get_user_code_origine_workflow
+from . import viz_utils
+from . import workflow_node 
 
 class TracableDataSetUtils:
     # This act as a default value for all TracableDataFrame or other objects
@@ -39,15 +38,15 @@ class TracableDataSetUtils:
 
     def set_default_ml_workflow_node_if_isnt_any(self):
         if self.ml_workflow_node is None:
-            self.ml_workflow_node = get_user_code_origine_workflow()
+            self.ml_workflow_node = workflow_node.get_user_code_origine_workflow()
 
     def get_workflow_node_not_null(self):
         if self.ml_workflow_node is None:
-            return get_user_code_origine_workflow(tracable_item = self)
+            return workflow_node.get_user_code_origine_workflow(tracable_item = self)
         return self.ml_workflow_node
 
     def set_ml_workflow_node(self, workflow_tracable, previous):
-        self.ml_workflow_node = WorkflowNode(
+        self.ml_workflow_node = workflow_node.WorkflowNode(
             workflow_tracable,
             previous = previous,
             tracable_item = self

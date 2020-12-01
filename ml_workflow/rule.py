@@ -91,3 +91,6 @@ class Rule(WorkflowTracable):
     @classmethod
     def get_from_reference_name(cls, name):
         return rule_config_manager.RuleConfigManager.get_from_reference_name(name)
+
+no_context_rule = Rule(name='Unspecified_rule')
+user_code_rule = Rule(name='generic.user_code')

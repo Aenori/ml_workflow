@@ -1,5 +1,4 @@
-from .workflow_node import get_user_code_origine_workflow
-from .workflow_node import WorkflowNode
+from . import workflow_node
 from .tracable_data_set import TracableDataFrame, get_tracable_structure
 from .context_utils import get_current_context
 
@@ -16,7 +15,10 @@ class DataFrameTracker:
             right.set_default_ml_workflow_node_if_isnt_any()
             right_ml_workflow_node = right.ml_workflow_node
         else:
-            right_ml_workflow_node = WorkflowNode(['Untracked DataFrame'], tracable_item=right)
+            right_ml_workflow_node = workflow_node.WorkflowNode(
+                ['Untracked DataFrame'], 
+                tracable_item=right
+            )
 
         res.ml_workflow_node.previous.append(right_ml_workflow_node)
 
@@ -53,7 +55,7 @@ class DataFrameTracker:
         current_context = get_current_context()
 
         if not input_df.ml_workflow_node.match_origin(current_context):
-            result_df.ml_workflow_node = WorkflowNode(
+            result_df.ml_workflow_node = workflow_node.WorkflowNode(
                 current_context,
                 previous = input_df.ml_workflow_node,
                 tracable_item=result_df

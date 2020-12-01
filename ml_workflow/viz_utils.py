@@ -58,10 +58,30 @@ class VizUtils:
             dot.add_edge(pydot.Edge(src, dst))
 
     @staticmethod
+    def add_sub_label(layer):
+        node = layer.get_leaf_origin()
+        if node is None:
+            return ''
+
+        sub_label = []
+
+        if node.has_version():
+            sub_label.append(f"version : {node.get_version()}")
+        if node.get_branch():
+            sub_label.append(f"branch : {node.get_branch()}")
+
+        if sub_label:
+            return f"\n{' '.join(sub_label)}"
+        return ''
+
+    @staticmethod
     def get_label(layer):
         label = str(layer)
+        label += VizUtils.add_sub_label(layer)
+
         if hasattr(layer, 'outside_len'):
             label += f"\nsize : {layer.outside_len}"
+
         return label
 
     @staticmethod

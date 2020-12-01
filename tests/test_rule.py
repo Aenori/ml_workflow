@@ -84,4 +84,4 @@ def test_force_final_handling():
 
     df2 = g(df)
     # temp1 should not be recorded here
-    assert(repr(list(map(lambda x : x.origin, df2.ml_workflow_node.get_all_nodes()))) == '[(temp2,), (<SpecialOrigin.USER_CODE: 0>,)]')
+    assert(repr(list(map(lambda x : x.origin, df2.ml_workflow_node.get_all_nodes()))) == '[(temp2,), (generic.user_code,)]')

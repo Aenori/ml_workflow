@@ -7,6 +7,7 @@ import utils
 from ml_workflow.workflow_node import WorkflowNode
 import ml_workflow
 from ml_workflow import Rule, DataSource
+import ml_workflow.tracable_data_set as tds
 
 import shutil
 import pandas as pd
@@ -63,3 +64,15 @@ def test_correct_weird_pydot_bug():
     VizUtils.correct_weird_pydot_bug('temp/correct_weird_pydot_bug')
     with open('temp/correct_weird_pydot_bug', 'r') as f:
         assert(f.read() == 'transform="rotate(0) translate(4 256)"')
+
+@ReferenceUsingTest('test_sub_label.svg')
+def test_sub_labels():
+    df = tds.TracableDataFrame({'A' : [1, 2]})
+
+    @Rule(name = 'viz_utils.test', branch='test', version='1.0')
+    def f(df):
+        df['A'] += 1
+        return df
+
+    df = f(df)
+    df.plot_model('test_sub_label.svg')

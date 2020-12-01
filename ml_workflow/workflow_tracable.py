@@ -16,6 +16,7 @@ class WorkflowTracable(Decorator):
         'return_tuple', 
     ])
     VALID_NAME_RE = re.compile("^[a-zA-Z0-9_\-\.]+$")
+    DEFAULT_VERSION = version.parse('0.0')
 
     def __init__(self, **kwargs):
         super().__init__()
@@ -58,7 +59,7 @@ class WorkflowTracable(Decorator):
 
     def get_source(self):
         if self.source_function is None:
-            return ''
+            return None
         return inspect.getsource(self.source_function)
 
     def get_branch(self):
@@ -67,9 +68,12 @@ class WorkflowTracable(Decorator):
         return self.branch
     
     def get_version(self):
-        if not hasattr(self, 'version'):
-            return None
+        if not self.has_version():
+            return self.DEFAULT_VERSION
         return self.version
+
+    def has_version(self):
+        return hasattr(self, 'version')
 
     @classmethod
     def get_authorized_attr(cls):

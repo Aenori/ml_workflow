@@ -5,6 +5,7 @@
 from enum import Enum
 import itertools
 
+from . import rule
 
 class WorkflowNode:
     _next_id = 0
@@ -92,8 +93,5 @@ class WorkflowNode:
     def get_root_origin(self):
         return self.origin[0]
 
-class SpecialOrigin(Enum):
-    USER_CODE = 0
-
 def get_user_code_origine_workflow(tracable_item = None):
-    return WorkflowNode([SpecialOrigin.USER_CODE], tracable_item = tracable_item)
+    return WorkflowNode(origin = [rule.user_code_rule], tracable_item = tracable_item)

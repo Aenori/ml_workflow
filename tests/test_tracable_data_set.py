@@ -1,6 +1,6 @@
 import python_path
 
-from ml_workflow.context_utils import no_context_rule
+from ml_workflow.rule import no_context_rule
 from ml_workflow.tracable_data_set import TracableDataFrame
 import ml_workflow.tracable_data_set as tds
 import utils
