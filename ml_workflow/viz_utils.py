@@ -95,17 +95,14 @@ class VizUtils:
 
     @staticmethod
     def get_color(origin):
-        try:
+        if hasattr(origin, 'highlight'):
             if origin.highlight == 2:
                 return 'red'
             elif origin.highlight == 1:
                 return 'green'
-            elif origin.get_branch():
-                return 'blue'
-            else:
-                return 'grey'
-        except AttributeError:
-            return 'grey'
+        if origin.get_branch():
+            return 'blue'
+        return 'grey'
 
     @staticmethod
     def correct_weird_pydot_bug(filename):
