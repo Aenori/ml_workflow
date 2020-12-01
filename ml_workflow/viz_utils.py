@@ -10,6 +10,7 @@ from IPython.display import SVG, display
 
 from . import viz_utils_node_detail_writer
 from . import viz_utils_layer
+from . import rule
 
 class VizUtils:
     rankdir = 'TB'
@@ -59,7 +60,8 @@ class VizUtils:
 
     @staticmethod
     def add_sub_label(layer):
-        node = layer.get_leaf_origin()
+        node = layer if isinstance(layer, rule.Rule) else layer.get_leaf_origin()
+            
         if node is None:
             return ''
 
@@ -171,7 +173,7 @@ class VizUtils:
                 cluster = pydot.Cluster(
                     style='dashed', 
                     graph_name=str(origin),
-                    label=str(origin)
+                    label=VizUtils.get_label(origin)
                 )
                 dot.add_subgraph(cluster)
 
