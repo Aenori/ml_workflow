@@ -13,7 +13,7 @@
 <g id="node1" class="node">
 <title>Workflow_node_13</title>
 <g id="a_node1"><a xlink:href="http://www.google.fr/?q=viz_utils.test" xlink:title="viz_utils.test\nversion : 1.0 branch : test">
-<polygon fill="none" stroke="#c0c0c0" points="155,-38 0,-38 0,0 155,0 155,-38"/>
+<polygon fill="none" stroke="#0000ff" points="155,-38 0,-38 0,0 155,0 155,-38"/>
 <text text-anchor="middle" x="77.5" y="-22.8" font-family="Times,serif" font-size="14.00" fill="#000000">viz_utils.test</text>
 <text text-anchor="middle" x="77.5" y="-7.8" font-family="Times,serif" font-size="14.00" fill="#000000">version : 1.0 branch : test</text>
 </a>
