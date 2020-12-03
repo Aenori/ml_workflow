@@ -67,6 +67,12 @@ class WorkflowTracable(Decorator):
             return None
         return self.branch
     
+    def get_tags(self):
+        try:
+            return self.tags
+        except AttributeError:
+            return None
+
     def get_version(self):
         if not self.has_version():
             return self.DEFAULT_VERSION

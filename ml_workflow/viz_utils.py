@@ -71,7 +71,10 @@ class VizUtils:
             sub_label.append(f"version : {node.get_version()}")
         if node.get_branch():
             sub_label.append(f"branch : {node.get_branch()}")
-
+        if node.get_tags():
+            if sub_label:
+                sub_label.append('\n')
+            sub_label.append(f"tags : {node.get_tags()}")
         if sub_label:
             return f"\n{' '.join(sub_label)}"
         return ''

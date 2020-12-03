@@ -3,6 +3,7 @@ from . import rule
 # Singleton class, only has static methods
 class RuleConfigManager:
     cache_reference_name_to_rule = {}
+    user_set_reference_name_to_rule = {}
 
     @classmethod
     def load_config(cls, config_filename):
@@ -20,6 +21,11 @@ class RuleConfigManager:
         cls.cache_reference_name_to_rule = {}
 
     @classmethod
+    def remove_branch(cls, branch):
+        cls.allowed_branches.remove(branch)
+        cls.cache_reference_name_to_rule = {}
+
+    @classmethod
     def clean_reference_for(cls, name):
         if name in cls.cache_reference_name_to_rule:
             del cls.cache_reference_name_to_rule[name]
@@ -33,7 +39,15 @@ class RuleConfigManager:
 
     @classmethod
     def set_for_reference_name(cls, name, rule_):
+        cls.user_set_reference_name_to_rule[name] = rule_
         cls.cache_reference_name_to_rule[name] = rule_
+
+    @classmethod
+    def unset_for_reference_name(cls, name):
+        if name in cls.user_set_reference_name_to_rule:
+            del cls.user_set_reference_name_to_rule[name]
+        if name in cls.cache_reference_name_to_rule:
+            del cls.cache_reference_name_to_rule[name]
 
     @classmethod
     def config_to_str(cls):
@@ -63,6 +77,9 @@ class RuleConfigManager:
 
     @classmethod
     def select_rule(cls, name):
+        if name in cls.user_set_reference_name_to_rule:
+            return cls.user_set_reference_name_to_rule[name]
+
         best_rule = None
 
         for irule in rule.Rule.rule_by_name[name]:

@@ -69,7 +69,7 @@ def test_correct_weird_pydot_bug():
 def test_sub_labels():
     df = tds.TracableDataFrame({'A' : [1, 2]})
 
-    @Rule(name = 'viz_utils.test', branch='test', version='1.0')
+    @Rule(name = 'viz_utils.test', branch='test', version='1.0', tags='test_tag')
     def f(df):
         df['A'] += 1
         return df

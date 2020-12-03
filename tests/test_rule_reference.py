@@ -2,7 +2,7 @@ import python_path
 
 from ml_workflow.rule_reference import RuleReference
 from ml_workflow.rule import Rule
-
+from ml_workflow.rule_config_manager import RuleConfigManager
 import pytest
 
 def clean_rule_for(name):
@@ -10,6 +10,8 @@ def clean_rule_for(name):
         del Rule.rule_by_name[name]
     if name in RuleReference.dict_by_name:
         del RuleReference.dict_by_name[name]
+    RuleConfigManager.unset_for_reference_name(name)
+    
 
 @pytest.fixture(autouse=True)
 def run_before_and_after_tests():

@@ -39,4 +39,7 @@ def test_rule_reference():
     assert(rph() == 0)
     RuleConfigManager.add_branch('other')
     assert(rph() == 2)    
-
+    RuleConfigManager.remove_branch('undefined')
+    assert(rph() == 2)
+    RuleConfigManager.remove_branch('other')
+    assert(rph() == 0)
