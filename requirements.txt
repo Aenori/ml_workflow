@@ -3,5 +3,4 @@ notebook
 numpy
 pandas
 pydot
-tables
 graphviz
